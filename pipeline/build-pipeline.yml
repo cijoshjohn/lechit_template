@@ -1,0 +1,103 @@
+# Uses concepts from https://blog.danskingdom.com/Custom-version-numbers-in-Azure-DevOps-yaml-pipelines/
+
+name: 'Build $(Rev:r)' # Gets dynamically set to the evaluated version number of the built package.
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - "main" # Trigger build automatically for main branch.
+
+pr:
+  branches:
+    include:
+      - "*" # Trigger build automatically for pull requests.
+
+variables:
+  versionMajorMinor: '0.0' # Manually adjust the version number as needed for semantic versioning. Patch is auto-incremented.
+  versionPatch: $[counter(variables['versionMajorMinor'], 0)] # Increments if versionMajorMinor hasn't changed since last build.
+  stableVersionNumber: '$(versionMajorMinor).$(versionPatch)'
+  prereleaseVersionNumber: 'Set dynamically below in a task' # Becomes 'stableVersionNumber-alpha-yyyyMMddTHHmmss'
+  versionNumber: 'Set dynamically below in a task' # Becomes stableVersionNumber or prereleaseVersionNumber based on if this is the main branch.
+  isMainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')] # Determine if we're building the main branch or not.
+  isManualBuild: $[eq(variables['Build.Reason'], 'Manual')] # Determine if the build was manually started or not. If true, a package will be published even for non-main branches.
+          
+stages:
+  - stage: Build
+    jobs:
+      - job: Build
+
+        pool:
+          vmImage: "windows-latest"
+
+        variables:
+          - group: Azure Devops Agent Credentials - Dev
+          - name: BuildConfiguration
+            value: "Release"
+
+        steps:
+          - task: PowerShell@2
+            displayName: Set the prereleaseVersionNumber variable value
+            inputs:
+              targetType: 'inline'
+              script: |
+                [string] $dateTime = (Get-Date -Format 'yyyyMMddTHHmmss')
+                [string] $prereleaseVersionNumber = "$(stableVersionNumber)-alpha-$dateTime"
+                Write-Host "Setting the prerelease version number variable to '$prereleaseVersionNumber'."
+                Write-Host "##vso[task.setvariable variable=prereleaseVersionNumber]$prereleaseVersionNumber"
+
+          - task: PowerShell@2
+            displayName: Set versionNumber to stable or prerelease based on branch
+            inputs:
+              targetType: 'inline'
+              script: |
+                [bool] $isMainBranch = $$(isMainBranch)
+                [string] $versionNumber = "$(prereleaseVersionNumber)"
+                if ($isMainBranch)
+                {
+                  $versionNumber = "$(stableVersionNumber)"
+                }
+                Write-Host "Setting the version number to use to '$versionNumber'."
+                Write-Host "##vso[task.setvariable variable=versionNumber]$versionNumber"
+
+          - task: PowerShell@2
+            displayName: Set the name of the build (i.e. the Build.BuildNumber)
+            inputs:
+              targetType: 'inline'
+              script: |
+                [string] $buildName = "$(versionNumber)"
+                Write-Host "Setting the name of the build to '$buildName'."
+                Write-Host "##vso[build.updatebuildnumber]$buildName"
+
+          - task: NodeTool@0
+            displayName: "Use Node 22.9.0"
+            inputs:
+              versionSpec: 22.9.0
+
+          - task: Npm@1
+            displayName: "npm install"
+            inputs:
+              verbose: false
+
+          - task: Npm@1
+            displayName: "Set package version"
+            inputs:
+              command: 'custom'
+              customCommand: 'version $(versionNumber)'
+
+          - task: Npm@1
+            displayName: "npm run build"
+            inputs:
+              command: custom
+              verbose: false
+              customCommand: "run build"
+
+          - task: Npm@1
+            displayName: "npm publish"
+            # Only publish automatically if running for the main branch, OR if the build was started manually for any branch.
+            condition: or(eq(variables['isMainBranch'], true), eq(variables['isManualBuild'], true))
+            inputs:
+                command: publish
+                publishRegistry: useFeed
+                publishFeed: cos
+                verbose: false   

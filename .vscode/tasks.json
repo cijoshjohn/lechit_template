@@ -1,0 +1,46 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "label": "start app",
+      "detail": "runs the vite server",
+      "isBackground": true,
+      "type": "npm",
+      "script": "dev",
+      "path": ".",
+      "options": {
+        "env": {
+          "BROWSER": "none",
+        }
+      },
+      "problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": ".",
+              "file": 1,
+              "location": 2,
+              "message": 3
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": { "regexp": ".*VITE.*ready.*" },
+            "endsPattern": { "regexp": ".*press.*to show help.*" },
+          }
+        }
+      ]
+    },
+    {
+      "label": "stop app",
+      "command": "echo ${input:terminate}",
+      "type": "shell"
+    },
+  ],
+  "inputs": [{
+    "id": "terminate",
+    "type": "command",
+    "command": "workbench.action.tasks.terminate",
+    "args": "terminateAll"
+  }]
+}

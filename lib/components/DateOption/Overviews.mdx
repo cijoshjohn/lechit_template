@@ -1,0 +1,39 @@
+import { Canvas, Meta } from "@storybook/blocks";
+import { OdsDateOption } from './OdsDateOption';
+import { Story } from '@storybook/addon-docs';
+
+import * as DateStories from './OdsDateOption.stories';
+
+<Meta title="Overviews" name="Overviews" of={DateStories}/>
+
+
+# Definition
+ 
+ Date Picker is part of MUI's `@mui/x-date-pickers` package, offering a modern and accessible way to pick dates. Below are some details about the component:
+ 
+## Usage
+ 
+The component comes in different variants depending of functionality we can hide/show the functions.
+ 
+
+
+<Canvas of={DateStories.Default} />
+
+
+## Inputs
+
+
+<ul>
+    <li>`align` : For alignment</li>
+    <li>`currentStartDate` : For setting current/starting date</li>
+    <li>`endDate` : For end Date</li>
+    <li>`fixedDateRange` : For setting the option from select box</li>
+    <li>`minLimit`:  For setting min date of selection range</li>
+    <li>`maxLimit`:  For setting max date of selection range</li>
+    <li>`showFixedDateSelection`:  Flag to show date select option</li>
+    <li>`showSelectedDateLabel`:  Flag to show selected date in label</li>
+     <li>`showDateRangeNavigation`:  Flag to show date naviagation for selected date range</li>
+  </ul>
+
+
+

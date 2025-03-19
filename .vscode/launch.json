@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Chrome",
+        "request": "launch",
+        "type": "chrome",
+        "runtimeExecutable": "stable",
+        "runtimeArgs": [
+          "--remote-debugging-port=9222"
+        ],
+        "url": "http://localhost:3000/",
+        "webRoot": "${workspaceFolder}",
+        "preLaunchTask": "start app",
+        "postDebugTask": "stop app",
+        "smartStep": true,
+        "skipFiles": [
+          "<node_internals>/**",
+        ],
+      },
+      {
+        "name": "Debug Chrome Custom",
+        "request": "launch",
+        "type": "chrome",
+        "runtimeExecutable": "custom", // Uses the `CHROME_PATH` env variable. Useful for non-standard chrome installs, such as Chromium.
+        "runtimeArgs": [
+          "--remote-debugging-port=9222"
+        ],
+        "url": "http://localhost:3000/",
+        "webRoot": "${workspaceFolder}",
+        "preLaunchTask": "start app",
+        "postDebugTask": "stop app",
+        "smartStep": true,
+        "skipFiles": [
+          "<node_internals>/**",
+        ],
+      },
+    ]
+  }

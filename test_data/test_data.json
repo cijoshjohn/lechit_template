@@ -1,0 +1,51 @@
+{
+  "throughput": {
+    "name": "Throughput",
+    "actual": 137.542,
+    "actualUnit": "tph",
+    "forecast": 142.665,
+    "forecastUnit": "tph"
+  },
+  "p80": {
+    "name": "P80",
+    "actual": 12.498,
+    "actualUnit": "um",
+    "forecast": 13.038,
+    "forecastUnit": "um"
+  },
+  "percentSolids": {
+    "name": "Solids",
+    "actual": 45.1,
+    "actualUnit": "%",
+    "forecast": 45.101,
+    "forecastUnit": "%"
+  },
+  "gradeAu": {
+    "name": "Au",
+    "actual": 11.696,
+    "actualUnit": "ppm",
+    "forecast": 11.665,
+    "forecastUnit": "ppm"
+  },
+  "gradeCu": {
+    "name": "Cu",
+    "actual": 3,
+    "actualUnit": "%",
+    "forecast": 6,
+    "forecastUnit": "%" 
+  },
+  "testField": {
+    "name": "DummyField",
+    "actual": 1,
+    "actualUnit": "%",
+    "forecast": 1,
+    "forecastUnit": "%" 
+  },
+  "gradeS": {
+    "name": "S",
+    "actual": 1,
+    "actualUnit": "%",
+    "forecast": 1,
+    "forecastUnit": "%" 
+  }
+}

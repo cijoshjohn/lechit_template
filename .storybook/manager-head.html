@@ -1,0 +1,15 @@
+<style>
+    button[data-nodetype="component"] svg,
+    [data-nodetype="component"] button svg {
+       display: none!important;
+    }
+    
+    button[data-nodetype="component"]::before,
+    button[data-nodetype="component"] button::before {
+        content: '';
+        width: 17px; /* set an icon size */
+        aspect-ratio: 1 / 1;
+        background-image: url(your-icon.svg);
+        background-size: cover;
+    }
+    </style>
