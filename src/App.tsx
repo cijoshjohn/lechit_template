@@ -18,8 +18,8 @@ import dayjs, { Dayjs } from 'dayjs';
 // import dummyShiftData from '../test_data/test_data.json'
 import ShiftFacade from 'services/ShiftFacade';
 import ScreenSizePage from 'components/Pages/ScreenSizePage';
-import { DetailSkelton } from '../lib/skeleton/DetailSkelton';
-import { ForecastSkelton } from '../lib/skeleton/ForecastSkelton';
+import { DetailSkelton } from '../lib/skeleton/DetailsViews/DetailSkelton';
+import { ForecastSkelton } from '../lib/skeleton/ForecastViews/ForecastSkelton';
 import MainPage from 'components/Pages/MainPage';
 
 function App() {

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DetailsMainContent } from './DetailsMainContent';
+import { ForecastMainContent } from '../ForecastMainContent';
 import { expect, within } from '@storybook/test';
 
 const meta = {
-  title: 'skeleton/DetailsViews/DetailsMainContent',
-  component: DetailsMainContent,
+  title: 'skeleton/DetailsViews/ForecastMainContent',
+  component: ForecastMainContent,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
@@ -12,7 +12,7 @@ const meta = {
     layout: 'fullscreen',
   },
   args: {},
-} satisfies Meta<typeof DetailsMainContent>;
+} satisfies Meta<typeof ForecastMainContent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ShiftViewSkeleton, ShiftViewSkeletonProps } from './ShiftViewSkeleton';
+import { ShiftViewSkeleton, ShiftViewSkeletonProps } from '../ShiftViewSkeleton';
 import dummyShiftData from '../../../test_data/test_data.json';
 import { ShiftContext } from '../../../src/contexts/ShiftContext'; //TODO: need to get the proper way for this path
 
@@ -20,13 +20,20 @@ const props: ShiftViewSkeletonProps = {
 
 // Create a decorator to wrap stories with the context provider
 const ShiftDateDecorator = (Story, context) => (
-  <ShiftContext.Provider value={{ currentShiftDate: dayjs('2025-01-02'), setCurrentShiftDate: () => {} }}>
+  <ShiftContext.Provider
+    value={{
+      currentShiftDate: dayjs('2025-01-02'),
+      setCurrentShiftDate: () => {},
+      customizedHighlightFields: ['gradeAu', 'gradeCu', 'gradeS'],
+      setCustomizedHighlightFields: () => {},
+    }}
+  >
     <Story />
   </ShiftContext.Provider>
 );
 
 const meta = {
-  title: 'skeleton/ShiftViews/ShiftViewSkeleton',
+  title: 'skeleton/ShiftViewSkeleton',
   component: ShiftViewSkeleton,
   decorators: [ShiftDateDecorator], // Apply the decorator globally for this story
 } satisfies Meta<typeof ShiftViewSkeleton>;

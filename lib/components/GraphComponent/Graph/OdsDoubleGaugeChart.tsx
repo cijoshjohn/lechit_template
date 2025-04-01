@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { OdsGraphComponent } from '../OdsGraphComponent';
 import Highcharts from 'highcharts/highcharts.src';
 import { useTheme } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 let defaultGraphOptions = {
   chart: {
@@ -125,21 +126,25 @@ export type OdsDoubleGaugeGraphComponentProps = {
 
 export function OdsDoubleGaugeChart(props: OdsDoubleGaugeGraphComponentProps): JSX.Element {
   const { actual, forecast, title, titlePosition, maxValue, ...derivedProps } = props;
+  const [newTitle] = useState(title);
 
   /*   const [newActual] = useState<number>(actual);
   const [newForecast] = useState<number>(forecast);
   const [newTitle] = useState<string>(title);
   const [newMaxValue] = useState<number>(maxValue); */
 
-  useEffect(() => {}, [actual, forecast, title, maxValue]);
+  useEffect(() => {}, [actual, forecast, title, maxValue, titlePosition]);
   const theme = useTheme();
-  let baseDoubleGaugeConfig = defaultGraphOptions;
+  let baseDoubleGaugeConfig = JSON.parse(JSON.stringify(defaultGraphOptions));
   baseDoubleGaugeConfig.series[0].data[0].y = actual;
   baseDoubleGaugeConfig.series[0].data[0].color = theme.palette.background['actual'];
   baseDoubleGaugeConfig.series[1].data[0].color = theme.palette.background['forecast'];
   baseDoubleGaugeConfig.series[1].data[0].y = forecast;
+  baseDoubleGaugeConfig.yAxis.min = 0;
   baseDoubleGaugeConfig.yAxis.max = maxValue ?? actual + forecast;
-  baseDoubleGaugeConfig.title.text = title;
+  baseDoubleGaugeConfig.title.text = newTitle;
+  baseDoubleGaugeConfig.title.align = 'center';
+  baseDoubleGaugeConfig.title.verticalAlign = titlePosition;
   if (derivedProps?.sx?.height) {
     baseDoubleGaugeConfig.chart['height'] = derivedProps.sx.height;
   }
@@ -147,7 +152,7 @@ export function OdsDoubleGaugeChart(props: OdsDoubleGaugeGraphComponentProps): J
     baseDoubleGaugeConfig.chart['width'] = derivedProps.sx.width;
   }
 
-  baseDoubleGaugeConfig.yAxis.title['y'] = titlePosition === 'bottom' ? 10 : -60;
+  baseDoubleGaugeConfig.yAxis.title['y'] = titlePosition === 'bottom' ? 90 : -60;
   baseDoubleGaugeConfig.pane.center[1] = titlePosition === 'bottom' ? '70%' : '90%';
 
   return (

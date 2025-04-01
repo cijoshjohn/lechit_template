@@ -6,6 +6,7 @@ import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material';
 
 export type OdsHighlightDataProps = CardProps & {
   data: OdsHighlightDataModel;
+  isShowDifference: boolean;
   sizePx: number;
 };
 
@@ -28,11 +29,12 @@ const StyledCard = styled(Card, {
  * A wrapper around MUI's {@link Avatar} component with auto-sizing and rendering of user's initials.
  */
 export function OdsHighlightData(props: OdsHighlightDataProps): JSX.Element {
-  const { data, sizePx, ...derivedProps } = props;
+  const { data, sizePx, isShowDifference, ...derivedProps } = props;
   const userColor = deepPurple[400];
   const theme = useTheme();
-  const difference: number = ((data.actualValue - data.forecastValue) / data.actualValue) * 100;
+  const difference: number = data ? ((data.actualValue - data.forecastValue) / data.actualValue) * 100 : 0;
   const boderColor = difference > 0 ? theme.palette.success.main : theme.palette.error.main;
+  const hideDiffernce = isShowDifference ?? false;
   return (
     <StyledCard userColor={userColor} sizePx={sizePx} {...derivedProps} data-testid="highlight-data">
       <Stack
@@ -44,30 +46,34 @@ export function OdsHighlightData(props: OdsHighlightDataProps): JSX.Element {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h5" sx={{ color: data.dataColor }}>
-          {data.dataName}
+        <Typography variant="h5" sx={{ color: data?.dataColor ?? '' }}>
+          {data?.dataName}
         </Typography>
 
-        <Typography variant="h6" sx={{ color: data.actualColor, fontWeight: 'bold' }}>
-          {data.actualValue} {data.actualUnit}
+        <Typography variant="h6" sx={{ color: data?.actualColor ?? '', fontWeight: 'bold' }}>
+          {data?.actualValue} {data?.actualUnit}
         </Typography>
 
-        <Typography variant="h6" sx={{ color: data.forecastColor, fontWeight: 'bold' }}>
-          {data.forecastValue} {data.forecastUnit}
+        <Typography variant="h6" sx={{ color: data?.forecastColor ?? '', fontWeight: 'bold' }}>
+          {data?.forecastValue} {data?.forecastUnit}
         </Typography>
 
-        <Chip
-          label={difference.toFixed(4) + '%'}
-          size="large"
-          color={boderColor}
-          variant="outlined"
-          icon={difference > 0 ? <ArrowDropUp /> : <ArrowDropDown />}
-          sx={{
-            color: difference > 0 ? theme.palette.success.main : theme.palette.error.main,
-            fontWeight: 'bold',
-            width: 150,
-          }}
-        ></Chip>
+        {hideDiffernce ? (
+          <Chip
+            label={difference.toFixed(4) + '%'}
+            size="large"
+            color={boderColor}
+            variant="outlined"
+            icon={difference > 0 ? <ArrowDropUp /> : <ArrowDropDown />}
+            sx={{
+              color: difference > 0 ? theme.palette.success.main : theme.palette.error.main,
+              fontWeight: 'bold',
+              width: 150,
+            }}
+          ></Chip>
+        ) : (
+          <></>
+        )}
       </Stack>
     </StyledCard>
   );

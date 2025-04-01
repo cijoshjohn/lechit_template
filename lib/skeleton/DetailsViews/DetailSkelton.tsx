@@ -1,15 +1,15 @@
 import { Box, BoxProps, Skeleton } from '@mui/material';
-import { DetailsHeader } from './DetailsViews/DetailsHeader';
-import { DetailsFilter } from './DetailsViews/DetailsFilter';
-import { DetailsMainContent } from './DetailsViews/DetailsMainContent';
-import { ForecastMainContent } from './ForecastViews/ForecastMainContent';
-export type ForecastSkeltonProps = BoxProps & {
+import { DetailsHeader } from './DetailsContent/DetailsHeader';
+import { DetailsFilter } from './DetailsContent/DetailsFilter';
+import { DetailsCenterContent } from './DetailsContent/DetailsCenterContent';
+import { day1 } from '../../../src/stories/assets/StubShiftData';
+export type DetailSkeltonProps = BoxProps & {
   title: string;
   isDataLoaded: boolean;
   shiftChartData: Array<number>;
 };
 
-export const ForecastSkelton = () => {
+export const DetailSkelton = () => {
   //let { title, isDataLoaded, shiftChartData } = props;
 
   return (
@@ -37,15 +37,15 @@ export const ForecastSkelton = () => {
       >
         <DetailsHeader pageName={''} highlightData={[]}></DetailsHeader>
       </Box>
-      {/* <DetailsFilter></DetailsFilter> */}
+      <DetailsFilter></DetailsFilter>
       {/* replace this */}
-      <Skeleton
+      {/* <Skeleton
         variant="rectangular"
         animation="wave"
         sx={{ width: '100%', minHeight: 70 }}
         data-testid="page-highlight-loading1"
-      />
-      <ForecastMainContent pageName={''} tankDetails={undefined}></ForecastMainContent>
+      /> */}
+      <DetailsCenterContent pageName={'Detild'} tankDetails={undefined} shiftData={day1}></DetailsCenterContent>
     </Box>
   );
 };

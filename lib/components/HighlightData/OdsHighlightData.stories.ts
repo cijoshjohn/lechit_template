@@ -35,6 +35,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     data: temp,
+    isShowDifference: true,
     sizePx: '100',
   },
 };

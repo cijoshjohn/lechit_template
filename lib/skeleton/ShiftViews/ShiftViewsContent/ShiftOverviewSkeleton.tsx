@@ -24,32 +24,30 @@ const GetHighlightDetails = (propData: OdsHighlightDataModel) => {
 const DynamicHighlightSection = (props: ShiftOverviewDynamicSectionProps) => {
   const hightlightGrids = [];
 
-  const fieldIds = props.fieldIds;
+  const fieldIds = props.fieldIds ? props.fieldIds : [];
   const shiftOverviewData = props.shiftOverviewData;
 
-  if (fieldIds) {
-    for (let fieldId of fieldIds) {
-      hightlightGrids.push(
-        <Grid
-          size={{ xs: 6, md: 4, lg: 4, xl: 4 }}
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {GetHighlightDetails({
-            dataName: shiftOverviewData[fieldId].name,
-            dataColor: '',
-            actualValue: shiftOverviewData[fieldId].actual,
-            actualColor: 'rgba(0, 118, 166, 1)',
-            actualUnit: shiftOverviewData[fieldId].actualUnit,
-            forecastValue: shiftOverviewData[fieldId].forecast,
-            forecastColor: 'rgba(127, 127, 127, 1)',
-            forecastUnit: shiftOverviewData[fieldId].forecastUnit,
-          })}
-        </Grid>,
-      );
-    }
+  for (let fieldId of fieldIds) {
+    hightlightGrids.push(
+      <Grid
+        size={{ xs: 6, md: 4, lg: 4, xl: 4 }}
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {GetHighlightDetails({
+          dataName: shiftOverviewData[fieldId].name,
+          dataColor: '',
+          actualValue: shiftOverviewData[fieldId].actual,
+          actualColor: 'rgba(0, 118, 166, 1)',
+          actualUnit: shiftOverviewData[fieldId].actualUnit,
+          forecastValue: shiftOverviewData[fieldId].forecast,
+          forecastColor: 'rgba(127, 127, 127, 1)',
+          forecastUnit: shiftOverviewData[fieldId].forecastUnit,
+        })}
+      </Grid>,
+    );
   }
 
   return hightlightGrids;

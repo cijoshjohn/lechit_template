@@ -1,5 +1,5 @@
 import { Box, BoxProps } from '@mui/material';
-import { ShiftViewSkeleton } from './ShiftViewSkeleton';
+import { ShiftViewSkeleton } from './ShiftViews/ShiftViewSkeleton';
 import { ShiftOverviewData } from 'models/ShiftOverviewData';
 
 export type DashboardSkeletonProps = BoxProps & {

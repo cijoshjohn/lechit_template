@@ -1,75 +1,70 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { FeedDetails, FeedDetailsProps } from './FeedDetails';
-import { day1 } from '../../../src/stories/assets/StubShiftData';
-
+import { Banner, BannerProps } from './Banner';
 import { expect, within } from '@storybook/test';
 
-const temp: FeedDetailsProps = {
-  shiftData: day1,
-  sizePx: 5,
+const props: BannerProps = {
+  cnAdded: 5,
+  cumulativeResidenceTime: 6,
+  cyanideProfile_model_cn: 7,
+  leachingProfile_recoverable_au: 8,
+  leachingProfile_recovered_au: 9,
 };
 
 const meta = {
-  title: 'component/FeedDetails',
-  component: FeedDetails,
+  title: 'component/Banner',
+  component: Banner,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: 'fullscreen',
   },
-  args: temp,
-} satisfies Meta<typeof FeedDetails>;
+  args: props,
+} satisfies Meta<typeof Banner>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
 
 export const TestCheckAllText: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    let element = canvas.getByText('Feed');
+    let element = canvas.getByText('Gold');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('13,564.900');
+    element = canvas.getByText('Recovered per hour');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('Cu (%)');
+    element = canvas.getByText('9 g/h');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('1.500');
+    element = canvas.getByText('Recovery');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('Throughput (tph)');
+    element = canvas.getByText('8 %');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('1,234.560');
+    element = canvas.getByText('Cyanide');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('P80 (μm)');
+    element = canvas.getByText('Added');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('Solids (%)');
+    element = canvas.getByText('5 kg');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('53.200');
+    element = canvas.getByText('Used per hour');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('pH');
+    element = canvas.getByText('6 kg/h');
     await expect(element).toBeInTheDocument();
 
-    element = canvas.getByText('10.200');
+    element = canvas.getByText('Tailings Conc.');
     await expect(element).toBeInTheDocument();
-  },
-};
 
-export const TestNoData: Story = {
-  args: {
-    shiftData: null,
-    sizePx: 5,
-  },
-  play: async ({ canvasElement }) => {
-    const skeleton = canvasElement.querySelector('.MuiSkeleton-root'); // Skeleton does not have a role by default, adjust as necessary
-    await expect(skeleton).toBeInTheDocument();
+    element = canvas.getByText('7 ppm');
+    await expect(element).toBeInTheDocument();
   },
 };

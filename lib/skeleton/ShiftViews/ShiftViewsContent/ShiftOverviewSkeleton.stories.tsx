@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ShiftOverviewSkeleton, ShiftOverviewSkeletonProps } from './ShiftOverviewSkeleton';
-import dummyShiftData from '../../test_data/test_data.json';
+import dummyShiftData from '../../../../test_data/test_data.json';
 
 import { expect, within } from '@storybook/test';
 
@@ -8,7 +8,7 @@ const props: ShiftOverviewSkeletonProps = {
   title: 'Today',
   isDataLoaded: true,
   shiftOverviewData: dummyShiftData,
-  customizedHighlightFields: [ 'gradeAu', 'gradeCu', 'gradeS' ]
+  customizedHighlightFields: ['gradeAu', 'gradeCu', 'gradeS'],
 };
 
 const meta = {
@@ -28,8 +28,8 @@ export const LoadingShift: Story = {
     title: 'Yesterday',
     isDataLoaded: false,
     shiftOverviewData: null,
-    customizedHighlightFields: [ 'gradeAu', 'gradeCu', 'gradeS' ]
-  }
+    customizedHighlightFields: ['gradeAu', 'gradeCu', 'gradeS'],
+  },
 };
 
 export const DynamicHighlightFields: Story = {
@@ -37,7 +37,7 @@ export const DynamicHighlightFields: Story = {
     title: 'Yesterday',
     isDataLoaded: true,
     shiftOverviewData: dummyShiftData,
-    customizedHighlightFields: [ 'gradeAu', 'testField', 'gradeS' ]
+    customizedHighlightFields: ['gradeAu', 'testField', 'gradeS'],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -51,5 +51,5 @@ export const DynamicHighlightFields: Story = {
 
     const dummyFieldTxt = canvas.getByText('DummyField');
     await expect(dummyFieldTxt).toBeInTheDocument();
-  }
+  },
 };

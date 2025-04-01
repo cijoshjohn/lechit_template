@@ -1,9 +1,9 @@
 import { Box, Skeleton, Paper, BoxProps } from '@mui/material';
-import { ShiftOverviewSkeleton } from './ShiftOverviewSkeleton';
-import { ShiftChartViewSkeleton } from './ShiftChartViewSkeleton';
+import { ShiftOverviewSkeleton } from '../ShiftViews/ShiftViewsContent/ShiftOverviewSkeleton';
+import { ShiftChartViewSkeleton } from './ShiftViewsContent/ShiftChartViewSkeleton';
 import { ShiftOverviewData } from 'models/ShiftOverviewData';
 import { OdsDateNaviation } from 'components/DateNavigation/OdsDateNaviation';
-import { useShiftContext } from '../../src/contexts/ShiftContext'; //TODO: need to get the proper way for this path
+import { useShiftContext } from '../../../src/contexts/ShiftContext'; //TODO: need to get the proper way for this path
 
 export type ShiftViewSkeletonProps = BoxProps & {
   title: string;

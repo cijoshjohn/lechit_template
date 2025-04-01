@@ -75,6 +75,8 @@ export function OdsGraphComponent(props: OdsGraphComponentProps): JSX.Element {
     if (!chartOptions.plotOptions.series.marker) chartOptions.plotOptions.series.marker = {};
     chartOptions.plotOptions.series.marker.fillColor = theme.palette.primary.main;
     chartOptions.plotOptions.series.marker.lineColor = theme.palette.background.paper;
+    chartOptions['credits'] = {};
+    chartOptions.credits['enabled'] = false;
   }, [theme]);
 
   return (

@@ -15,7 +15,7 @@ type StyledCardProps = {
 };
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
   backgroundColor: theme.palette.grey[100],
@@ -41,91 +41,95 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
   const userColor = deepPurple[400];
   const [newShiftData] = useState(shiftData);
   const cuurentTheme = useTheme();
-  const rows = [
-    {
-      id: 1,
-      name: 'Au',
-      value:
-        Number(newShiftData.auProduced).toLocaleString(navigator.languages, {
-          minimumFractionDigits: 3,
-        }) + ' (ppm)',
-    },
-    {
-      id: 2,
-      name: 'Cu',
-      value:
-        Number(newShiftData.gradeCu).toLocaleString(navigator.languages, {
-          minimumFractionDigits: 3,
-        }) + ' (%)',
-    },
-    {
-      id: 3,
-      name: 'Throughput',
-      value:
-        Number(newShiftData.throughput).toLocaleString(navigator.languages, {
-          minimumFractionDigits: 3,
-        }) + ' (tph)',
-    },
-    {
-      id: 4,
-      name: 'P80',
-      value:
-        Number(newShiftData.p80).toLocaleString(navigator.languages, {
-          minimumFractionDigits: 3,
-        }) + ' (μm)',
-    },
-    {
-      id: 5,
-      name: 'Solids',
-      value:
-        Number(newShiftData.percentSolids).toLocaleString(navigator.languages, {
-          minimumFractionDigits: 3,
-        }) + ' (%)',
-    },
-    {
-      id: 6,
-      name: 'pH',
-      value: newShiftData.tanks[0]
-        ? shiftData.tanks[0].ph
-          ? Number(shiftData.tanks[0].ph).toLocaleString(navigator.languages, {
-              minimumFractionDigits: 3,
-            })
-          : ''
-        : '',
-    },
-  ];
 
-  const columns = [
-    { field: 'name', headerName: '', width: 160 },
-    { field: 'value', headerName: '', width: 200 },
-  ];
+  let getRows = () => {
+    return [
+      {
+        id: 1,
+        name: 'Au',
+        value:
+          Number(newShiftData.auProduced).toLocaleString(navigator.languages, {
+            minimumFractionDigits: 3,
+          }) + ' (ppm)',
+      },
+      {
+        id: 2,
+        name: 'Cu',
+        value:
+          Number(newShiftData.gradeCu).toLocaleString(navigator.languages, {
+            minimumFractionDigits: 3,
+          }) + ' (%)',
+      },
+      {
+        id: 3,
+        name: 'Throughput',
+        value:
+          Number(newShiftData.throughput).toLocaleString(navigator.languages, {
+            minimumFractionDigits: 3,
+          }) + ' (tph)',
+      },
+      {
+        id: 4,
+        name: 'P80',
+        value:
+          Number(newShiftData.p80).toLocaleString(navigator.languages, {
+            minimumFractionDigits: 3,
+          }) + ' (μm)',
+      },
+      {
+        id: 5,
+        name: 'Solids',
+        value:
+          Number(newShiftData.percentSolids).toLocaleString(navigator.languages, {
+            minimumFractionDigits: 3,
+          }) + ' (%)',
+      },
+      {
+        id: 6,
+        name: 'pH',
+        value: newShiftData.tanks[0]
+          ? shiftData.tanks[0].ph
+            ? Number(shiftData.tanks[0].ph).toLocaleString(navigator.languages, {
+                minimumFractionDigits: 3,
+              })
+            : ''
+          : '',
+      },
+    ];
+  };
+  let getColumns = () => {
+    return [
+      { field: 'name', headerName: '', width: 160 },
+      { field: 'value', headerName: '', width: 200 },
+    ];
+  };
 
   const withData = () => {
     return (
       <>
-        <DataGridPro
-          sx={{
-            border: 0,
-            '& .MuiDataGrid-cell': { fontSize: cuurentTheme.typography.h6 },
-            '& .MuiDataGrid-columnHeaders': {
-              display: 'none', // Hides the entire header row
-            },
-          }}
-          columns={columns}
-          rows={rows}
-          autoHeight
-          slots={{
-            footer: () => null,
-          }}
-        ></DataGridPro>
+        <StyledCard userColor={userColor} sizePx={sizePx} {...derivedProps} data-testid="feed-data">
+          <StyledPaper>
+            <Typography variant="h3">Feed</Typography>
+            <DataGridPro
+              sx={{
+                border: 0,
+                '& .MuiDataGrid-cell': { fontSize: cuurentTheme.typography.h6 },
+                '& .MuiDataGrid-columnHeaders': {
+                  display: 'none', // Hides the entire header row
+                },
+              }}
+              columns={getColumns()}
+              rows={getRows()}
+              autoHeight
+              slots={{
+                footer: () => null,
+              }}
+            ></DataGridPro>
+          </StyledPaper>
+        </StyledCard>
       </>
     );
   };
 
-  return (
-    <StyledCard userColor={userColor} sizePx={sizePx} {...derivedProps} data-testid="feed-data">
-      <Typography variant="h3">Feed</Typography>
-      <StyledPaper>{newShiftData ? withData() : <Skeleton></Skeleton>}</StyledPaper>
-    </StyledCard>
-  );
+  return <> {newShiftData ? withData() : <Skeleton width={'100%'} height={500}></Skeleton>}</>;
 }
