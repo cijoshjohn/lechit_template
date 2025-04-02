@@ -1,11 +1,15 @@
-import { Box, BoxProps, Button, Card, Grid2 as Grid, Paper, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, BoxProps, Grid2 as Grid, Paper, Stack, Typography, IconButton } from '@mui/material';
 import { ShiftData } from 'models/ShiftData';
 import dayjs from 'dayjs';
 import { FeedDetails } from 'components/Feed/FeedDetails';
 import { styled, useTheme } from '@mui/material/styles';
-import OdsDoubleGaugeChart from 'components/GraphComponent/Graph/OdsDoubleGaugeChart';
-import React from 'react';
-
+import React, { useEffect, useMemo, useState } from 'react';
+import OdsSingleGauge from 'components/GraphComponent/Graph/OdsSingleGauge/OdsSingleGaugeChart';
+import { CaroselComponent } from 'components/Carosel/CaroselComponent';
+import { day1 } from '../../../../src/stories/assets/StubShiftData';
+import { Code, GridView } from '@mui/icons-material';
+import { OdsGridComponent } from 'components/Grid/OdsGridComponent';
+import { tankColumns, columnGroupingBase } from '../../../../src/config/GridColumnDetails';
 export type DetailsMainContentProps = BoxProps & {
   shiftData: ShiftData;
   pageName: string;
@@ -27,11 +31,42 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
   const theme = useTheme();
   let today = dayjs();
 
+  const [mainContentType, setMainContentType] = useState('tankDetails');
+
   const StyledStack = styled(Stack)(({ theme }) => ({
     display: 'flex',
     gap: theme.spacing(1),
     width: '100%',
   }));
+
+  useEffect(() => {}, [mainContentType]);
+
+  const onContentChange = (value: string) => {
+    setMainContentType(value);
+  };
+
+  const SelectOption = () => {
+    return (
+      <Stack direction={'row'} justifyContent={'flex-end'}>
+        <IconButton
+          aria-label="main"
+          color="primary"
+          onClick={() => onContentChange('tankDetails')}
+          data-testid="date-decrement"
+        >
+          <Code />
+        </IconButton>
+        <IconButton
+          aria-label="grid"
+          color="primary"
+          onClick={() => onContentChange('decrement')}
+          data-testid="date-decrement"
+        >
+          <GridView />
+        </IconButton>
+      </Stack>
+    );
+  };
 
   const MainData = (data: mainDetailsValues) => {
     return (
@@ -103,28 +138,67 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
     );
   };
 
-  /* const OdsDoubleGaugeChartCom = (
-    actual: number,
-    forecast: number,
-    title: string,
-    titlePosition: string,
-    maxValue: number,
-  ) => {
+  const GridDetails = () => {
     return (
-      <OdsDoubleGaugeChart
-        actual={actual}
-        forecast={forecast}
-        title={title}
-        titlePosition={titlePosition}
-        maxValue={maxValue}
-      ></OdsDoubleGaugeChart>
+      <>
+        <OdsGridComponent
+          gridRows={[]}
+          gridColumns={tankColumns}
+          gridPageSize={0}
+          gridPerPageOptions={[]}
+          columnGroupingModel={columnGroupingBase}
+          columns={[]}
+        ></OdsGridComponent>
+      </>
     );
-  }; */
+  };
 
-  /* const MemoizedGaugeChart = React.memo(() => (
-    <OdsDoubleGaugeChart actual={5} forecast={8} title={'Gold Recovered'} titlePosition={'bottom'} maxValue={19} />
-  )); */
-  const MemoizedGaugeChart = React.memo(OdsDoubleGaugeChart);
+  const MainContent = () => {
+    return (
+      <>
+        {SelectOption()}
+
+        {mainContentType === 'tankDetails' ? (
+          <>
+            <MainHighlightData />
+            <CaroselComponent imageLink={''} type={''} totalNumber={0} tankDetails={day1.tanks} />
+          </>
+        ) : (
+          GridDetails()
+        )}
+      </>
+    );
+  };
+
+  const ConcentrateGaugeChart = useMemo(
+    () => (
+      <OdsSingleGauge
+        gaugevalue={5}
+        title="Concentrate"
+        titlePosition="top"
+        maxValue={19}
+        footerTitle={'Gold Recoverd'}
+        unit={'g/h'}
+        mainColor={null}
+      />
+    ),
+    [],
+  );
+
+  const TailingsGaugeChart = useMemo(
+    () => (
+      <OdsSingleGauge
+        gaugevalue={25}
+        title="Tailings"
+        titlePosition="top"
+        maxValue={30}
+        footerTitle={'Unreacted Cyanide'}
+        unit={'ppm'}
+        mainColor={'#0000'}
+      />
+    ),
+    [],
+  );
 
   return (
     <Box
@@ -141,34 +215,20 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           <Grid size={{ xs: 2.5, md: 2.5, lg: 2.5, xl: 2.5 }} height={'100%'}>
             <FeedDetails shiftData={data.shiftData} sizePx={0}></FeedDetails>
           </Grid>
-          <Grid size={{ xs: 7, md: 7, lg: 7, xl: 7 }} p={0}>
-            <MainHighlightData />
-
-            <Box sx={{ width: '100%', height: 500, spacing: 2, margin: 4 }}> hero section </Box>
+          <Grid size={{ xs: 7, md: 7, lg: 7, xl: 7 }} p={0} height={'100%'}>
+            <Box sx={{ width: '100%', overflow: 'hidden', height: '100%' }}>
+              <Stack direction={'column'} gap={2} m={2} height={700} sx={{ backgroundColor: 'transparent' }}>
+                {MainContent()}
+              </Stack>
+            </Box>
           </Grid>
           <Grid size={{ xs: 2.5, md: 2.5, lg: 2.5, xl: 2.5 }}>
             <Grid container spacing={2} p={0} justifyContent={'center'} alignContent={'center'} alignItems={'center'}>
               <Grid>
-                <Paper>
-                  <MemoizedGaugeChart
-                    actual={5}
-                    forecast={8}
-                    title="Gold Recovered"
-                    titlePosition="bottom"
-                    maxValue={19}
-                  />
-                </Paper>
+                <Paper>{ConcentrateGaugeChart}</Paper>
               </Grid>
               <Grid>
-                <Paper>
-                  <MemoizedGaugeChart
-                    actual={5}
-                    forecast={20}
-                    title="Unreacted Cyanide"
-                    titlePosition="bottom"
-                    maxValue={30}
-                  />
-                </Paper>
+                <Paper>{TailingsGaugeChart}</Paper>
               </Grid>
             </Grid>
           </Grid>

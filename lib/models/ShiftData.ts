@@ -1,4 +1,4 @@
-interface Tank {
+export interface Tank {
   residenceTime: number;
   cyanideProfile: {
     model_s: number;

@@ -26,7 +26,7 @@ export function Banner(props: BannerProps): JSX.Element {
 
   const displayValue = (value: number, unit: string) => {
     return (
-      <Typography variant="h3">
+      <Typography variant="h4" noWrap>
         {value} {unit}
       </Typography>
     );
@@ -39,32 +39,32 @@ export function Banner(props: BannerProps): JSX.Element {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          p: 2,
+          p: 1,
         }}
       >
-        <Paper elevation={3} sx={{ width: '100%', padding: 4 }}>
+        <Box sx={{ width: '100%', padding: 1 }}>
           <StyledStack flexDirection="row" justifyContent="center">
             <StyledStack flexDirection="column" justifyContent="space-evenly">
               <StyledStack flexDirection="row" justifyContent="flex-start">
-                <Typography variant="h3">Gold</Typography>
+                <Typography variant="h4">Gold</Typography>
               </StyledStack>
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="body1" color="grey.400" noWrap>
                     Recovered per hour
                   </Typography>
                   {leachingProfile_recovered_au ? (
                     displayValue(leachingProfile_recovered_au, 'g/h')
                   ) : (
-                    <Skeleton width={'50%'} height={150}></Skeleton>
+                    <Skeleton width={'50%'} height={100}></Skeleton>
                   )}
                 </StyledStack>
 
                 <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="body1" color="grey.400" noWrap>
                     Recovery
                   </Typography>
                   {leachingProfile_recoverable_au ? (
@@ -75,14 +75,16 @@ export function Banner(props: BannerProps): JSX.Element {
                 </StyledStack>
               </StyledStack>
             </StyledStack>
+            <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+
             <StyledStack flexDirection="column" justifyContent="space-evenly">
               <StyledStack flexDirection="row" justifyContent="flex-start">
-                <Typography variant="h3">Cyanide</Typography>
+                <Typography variant="h4">Cyanide</Typography>
               </StyledStack>
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="body1" color="grey.400">
                     Added
                   </Typography>
                   {cnAdded ? displayValue(cnAdded, 'kg') : <Skeleton width={'50%'} height={150}></Skeleton>}
@@ -91,7 +93,7 @@ export function Banner(props: BannerProps): JSX.Element {
                 <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="body1" color="grey.400" noWrap>
                     Used per hour
                   </Typography>
                   {cnAdded ? (
@@ -104,7 +106,7 @@ export function Banner(props: BannerProps): JSX.Element {
                 <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="body1" color="grey.400" noWrap>
                     Tailings Conc.
                   </Typography>
                   {cyanideProfile_model_cn ? (
@@ -116,7 +118,7 @@ export function Banner(props: BannerProps): JSX.Element {
               </StyledStack>
             </StyledStack>
           </StyledStack>
-        </Paper>
+        </Box>
       </Box>
     </>
   );

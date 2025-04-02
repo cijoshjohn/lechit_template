@@ -30,7 +30,7 @@ export const DetailsHeader = (props: ShiftChartViewSkeletonProps) => {
         {headerDetails.pageName}
       </Typography>
 
-      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+      {/* <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
         {headerDetails.highlightData.length > 0 ? (
           headerDetails.highlightData.map((element: OdsHighlightDataModel) => GetHighlightDetails(element))
         ) : (
@@ -53,7 +53,7 @@ export const DetailsHeader = (props: ShiftChartViewSkeletonProps) => {
             />
           </>
         )}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

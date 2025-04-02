@@ -2,7 +2,7 @@ import { Typography, Button, Skeleton, Box, BoxProps, Stack, Grid2 as Grid } fro
 
 import { OdsHighlightData } from 'components/HighlightData/OdsHighlightData';
 import { ShiftOverviewData } from 'models/ShiftOverviewData';
-import OdsDoubleGaugeChart from 'components/GraphComponent/Graph/OdsDoubleGaugeChart';
+import OdsDoubleGaugeChart from 'components/GraphComponent/Graph/OdsDoubleGauge/OdsDoubleGaugeChart';
 import { OdsHighlightDataModel } from 'models/OdsHighlightData';
 
 export type ShiftOverviewSkeletonProps = BoxProps & {

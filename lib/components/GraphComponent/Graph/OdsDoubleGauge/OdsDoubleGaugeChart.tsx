@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { OdsGraphComponent } from '../OdsGraphComponent';
+import { OdsGraphComponent } from '../../OdsGraphComponent';
 import Highcharts from 'highcharts/highcharts.src';
 import { useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';

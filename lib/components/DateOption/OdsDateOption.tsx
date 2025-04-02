@@ -10,11 +10,17 @@ import Calendar from '@mui/icons-material/Event';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
 interface OdsDateOptionProps extends DatePickerProps<Dayjs> {
+  /**
+   * fix postion
+   */
   align: string;
+  /**
+   * Start date on load
+   */
   currentStartDate: Dayjs;
   endDate: Dayjs;
   fixedDateRange: number | string;
@@ -42,6 +48,7 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
   const {
     // align,
     currentStartDate,
+    endDate,
     fixedDateRange,
     // endDate,
     minLimit,
@@ -50,12 +57,15 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
     showSelectedDateLabel,
     showDateRangeNavigation,
   } = props;
-  // const [dateAlign, setAlign] = useState(align);
-  // const [dateCurrentStartDate, setCurrentStartDate] = useState(currentStartDate);
-  // const [dateEndDate, setEndDate] = useState(endDate);
+
+  let endDateValue = null;
+  if (!endDate) {
+    endDateValue = endDate;
+  }
+
   const [dateMinLimit] = useState(minLimit);
   const [dateMaxLimit] = useState(maxLimit);
-  const [dateRangeData, setDateRangeData] = useState<[Dayjs, any]>([currentStartDate, null]);
+  const [dateRangeData, setDateRangeData] = useState<[Dayjs, any]>([currentStartDate, endDateValue]);
   const [dateInStringFormat, setDateInStringFormat] = useState<string>();
   const [dateFixedValue, setDateFixedValue] = useState<number | string>(fixedDateRange ? fixedDateRange : 'unselected');
   const [isShowFixedDateSelection] = useState(showFixedDateSelection ? showFixedDateSelection : true);
@@ -86,27 +96,6 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
     ['last_month', last_month],
   ];
 
-  const isPredefinedRange = (newValue: [any, any] | any | null) => {
-    if (!newValue) return null;
-
-    if (Array.isArray(newValue)) {
-      return predefinedRanges.find(([key, range]) => {
-        if (Array.isArray(range)) {
-          return range[0].isSame(newValue[0]) && range[1].isSame(newValue[1]);
-        } else {
-          return false;
-        }
-      })?.[0];
-    } else {
-      return predefinedRanges.find(([key, range]) => {
-        if (!Array.isArray(range)) {
-          return newValue.isSame(range);
-        }
-        return false;
-      })?.[0];
-    }
-  };
-
   const handleDateChange = (newValue: any | null) => {
     if (newValue) {
       const startDate = newValue[0];
@@ -132,6 +121,31 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
       setDateRangeData(newValue);
     }
   };
+
+  const isPredefinedRange = (newValue: [any, any] | any | null) => {
+    if (!newValue) return null;
+
+    if (Array.isArray(newValue)) {
+      return predefinedRanges.find(([key, range]) => {
+        if (Array.isArray(range)) {
+          return range[0].isSame(newValue[0]) && range[1].isSame(newValue[1]);
+        } else {
+          return false;
+        }
+      })?.[0];
+    } else {
+      return predefinedRanges.find(([key, range]) => {
+        if (!Array.isArray(range)) {
+          return newValue.isSame(range);
+        }
+        return false;
+      })?.[0];
+    }
+  };
+
+  useEffect(() => {
+    handleDateChange(dateRangeData);
+  }, [dateFixedValue]);
 
   const handleFixDateChange = (newValue: number | string | any) => {
     if (typeof newValue.target.value === 'string') {
@@ -315,74 +329,90 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
     );
   };
 
+  const MainLable = () => {
+    return (
+      <>
+        <Typography variant="h4" component="h4" data-testid="date-display">
+          {dateInStringFormat}
+        </Typography>
+      </>
+    );
+  };
+
+  const DateSection = () => {
+    return (
+      <>
+        <Stack direction="row" spacing={1} alignItems="center">
+          {isShowFixedDateSelection ? (
+            <FormControl>
+              <InputLabel id="date-select-label"></InputLabel>
+              <FixedDatePicker />
+            </FormControl>
+          ) : (
+            <></>
+          )}
+
+          {isShowDateRangeNavigation ? (
+            <FormControl id="date-decrement-button">
+              <IconButton
+                aria-label="decrement"
+                color="primary"
+                onClick={() => onDateChange('decrement')}
+                data-testid="date-decrement"
+              >
+                <ArrowBackIos />
+              </IconButton>
+            </FormControl>
+          ) : (
+            <></>
+          )}
+
+          <FormControl data-testid="date-picker-range">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <StyledDateOption
+                sx={{
+                  minWidth: 275,
+                }}
+                slots={{ field: SingleInputDateRangeField }}
+                slotProps={{ textField: { InputProps: { endAdornment: <Calendar /> } } }}
+                name="allowedRange"
+                onChange={handleDateChange}
+                format="YYYY-MM-DD"
+                minDate={dateMinLimit}
+                maxDate={dateMaxLimit}
+                value={dateRangeData}
+                align={''}
+              />
+            </LocalizationProvider>
+          </FormControl>
+
+          {isShowDateRangeNavigation ? (
+            <FormControl id="date-increment-button">
+              <IconButton
+                aria-label="increment"
+                color="primary"
+                onClick={() => onDateChange('increment')}
+                data-testid="date-increment"
+              >
+                <ArrowForwardIos />
+              </IconButton>
+            </FormControl>
+          ) : (
+            <></>
+          )}
+        </Stack>
+      </>
+    );
+  };
+
   return (
     <>
-      <Stack direction="row" spacing={2} alignItems="center">
-        {isShowFixedDateSelection ? (
-          <FormControl>
-            <InputLabel id="date-select-label"></InputLabel>
-            <FixedDatePicker />
-          </FormControl>
-        ) : (
-          <></>
-        )}
-
-        {isShowDateRangeNavigation ? (
-          <FormControl id="date-decrement-button">
-            <IconButton
-              aria-label="decrement"
-              color="primary"
-              onClick={() => onDateChange('decrement')}
-              data-testid="date-decrement"
-            >
-              <ArrowBackIos />
-            </IconButton>
-          </FormControl>
-        ) : (
-          <></>
-        )}
-
-        <FormControl data-testid="date-picker-range">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StyledDateOption
-              sx={{
-                minWidth: 275,
-              }}
-              slots={{ field: SingleInputDateRangeField }}
-              slotProps={{ textField: { InputProps: { endAdornment: <Calendar /> } } }}
-              name="allowedRange"
-              onChange={handleDateChange}
-              format="YYYY-MM-DD"
-              minDate={dateMinLimit}
-              maxDate={dateMaxLimit}
-              value={dateRangeData}
-              align={''}
-            />
-          </LocalizationProvider>
-        </FormControl>
-
-        {isShowDateRangeNavigation ? (
-          <FormControl id="date-increment-button">
-            <IconButton
-              aria-label="increment"
-              color="primary"
-              onClick={() => onDateChange('increment')}
-              data-testid="date-increment"
-            >
-              <ArrowForwardIos />
-            </IconButton>
-          </FormControl>
-        ) : (
-          <></>
-        )}
-
-        {isShowSelectedDateLabel ? (
-          <Typography variant="h4" component="h5" data-testid="date-display">
-            {dateInStringFormat}
-          </Typography>
-        ) : (
-          <></>
-        )}
+      <Stack direction="column" spacing={2} alignItems="flex-start">
+        <Typography variant="h6" component="h6">
+          Details
+        </Typography>
+        {MainLable()}
+        {DateSection()}
       </Stack>
     </>
   );

@@ -20,7 +20,7 @@ export const DetailSkelton = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 3,
+        gap: 1,
         height: 175,
       }}
     >
@@ -31,8 +31,8 @@ export const DetailSkelton = () => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 3,
-          height: 175,
+          gap: 1,
+          //height: 175,
         }}
       >
         <DetailsHeader pageName={''} highlightData={[]}></DetailsHeader>
