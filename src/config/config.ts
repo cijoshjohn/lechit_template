@@ -9,7 +9,7 @@ dayjs.extend(timezonePlugin);
 
 const config = {
   defaultPath: '/shiftViewer',
-  fontFamily: `'Roboto', sans-serif`,
+  fontFamily: `'Roboto Mono', sans-serif`,
   i18n: 'en',
   miniDrawer: false,
   container: true,

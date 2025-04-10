@@ -2,7 +2,9 @@ import { Box, BoxProps, Skeleton } from '@mui/material';
 import { DetailsHeader } from './DetailsContent/DetailsHeader';
 import { DetailsFilter } from './DetailsContent/DetailsFilter';
 import { DetailsCenterContent } from './DetailsContent/DetailsCenterContent';
-import { day1 } from '../../../src/stories/assets/StubShiftData';
+import { day1, weeklyResult } from '../../../src/stories/assets/StubShiftData';
+import { useState } from 'react';
+import { ForecastSkelton } from 'skeleton/ForecastViews/ForecastSkelton';
 export type DetailSkeltonProps = BoxProps & {
   title: string;
   isDataLoaded: boolean;
@@ -11,7 +13,7 @@ export type DetailSkeltonProps = BoxProps & {
 
 export const DetailSkelton = () => {
   //let { title, isDataLoaded, shiftChartData } = props;
-
+  const [isForecast, setIsForecast] = useState(false);
   return (
     <Box
       sx={{
@@ -37,7 +39,12 @@ export const DetailSkelton = () => {
       >
         <DetailsHeader pageName={''} highlightData={[]}></DetailsHeader>
       </Box>
-      <DetailsFilter></DetailsFilter>
+      <DetailsFilter
+        shiftData={day1}
+        onForecastShow={function (isForecast: boolean): void {
+          setIsForecast(isForecast);
+        }}
+      ></DetailsFilter>
       {/* replace this */}
       {/* <Skeleton
         variant="rectangular"
@@ -45,7 +52,13 @@ export const DetailSkelton = () => {
         sx={{ width: '100%', minHeight: 70 }}
         data-testid="page-highlight-loading1"
       /> */}
-      <DetailsCenterContent pageName={'Detild'} tankDetails={undefined} shiftData={day1}></DetailsCenterContent>
+      {isForecast ? (
+        <>
+          <ForecastSkelton />
+        </>
+      ) : (
+        <DetailsCenterContent pageName={'Detild'} tankDetails={undefined} shiftData={day1}></DetailsCenterContent>
+      )}
     </Box>
   );
 };

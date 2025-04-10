@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Card, CardProps, styled, Typography, Paper, useTheme, Skeleton } from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
 import { ShiftData } from 'models/ShiftData';
@@ -5,7 +6,7 @@ import { useState } from 'react';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 import { theme } from 'highcharts';
 export type FeedDetailsProps = CardProps & {
-  shiftData: ShiftData;
+  shiftData: ShiftData | object;
   sizePx: number;
 };
 
@@ -16,7 +17,7 @@ type StyledCardProps = {
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
-  textAlign: 'center',
+  textAlign: 'left',
   color: theme.palette.text.secondary,
   backgroundColor: theme.palette.grey[100],
   flex: 1,
@@ -29,8 +30,8 @@ const StyledCard = styled(Card, {
   width: '100%',
   padding: 10,
   margin: 0,
-  justifyContent: 'center',
-  alignItems: 'center',
+  justifyContent: 'flex-start',
+  alignItems: 'flex-start',
 }));
 
 /*
@@ -40,67 +41,83 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
   const { shiftData, sizePx, ...derivedProps } = props;
   const userColor = deepPurple[400];
   const [newShiftData] = useState(shiftData);
-  const cuurentTheme = useTheme();
+  const currentTheme = useTheme();
 
   let getRows = () => {
     return [
       {
-        id: 1,
-        name: 'Au',
-        value:
-          Number(newShiftData.auProduced).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
-          }) + ' (ppm)',
-      },
-      {
-        id: 2,
-        name: 'Cu',
-        value:
-          Number(newShiftData.gradeCu).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
-          }) + ' (%)',
-      },
-      {
         id: 3,
         name: 'Throughput',
-        value:
-          Number(newShiftData.throughput).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
-          }) + ' (tph)',
+        value: Number(newShiftData.summary ? newShiftData.summary.throughput : newShiftData.throughput).toLocaleString(
+          navigator.languages,
+          {
+            minimumFractionDigits: 0,
+          },
+        ),
+        unit: ' tph',
       },
       {
         id: 4,
         name: 'P80',
-        value:
-          Number(newShiftData.p80).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
-          }) + ' (μm)',
+        value: Number(newShiftData.summary ? newShiftData.summary.p80 : newShiftData.p80).toLocaleString(
+          navigator.languages,
+          {
+            minimumFractionDigits: 0,
+          },
+        ),
+        unit: ' μm',
       },
       {
         id: 5,
         name: 'Solids',
-        value:
-          Number(newShiftData.percentSolids).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
-          }) + ' (%)',
+        value: Number(
+          newShiftData.summary ? newShiftData.summary.percentSolids : newShiftData.percentSolids,
+        ).toLocaleString(navigator.languages, {
+          minimumFractionDigits: 1,
+        }),
+        unit: ' %',
+      },
+      {
+        id: 1,
+        name: 'Au',
+        value: Number(newShiftData.summary ? newShiftData.summary.auProduced : newShiftData.auProduced).toLocaleString(
+          navigator.languages,
+          {
+            minimumFractionDigits: 0,
+          },
+        ),
+        unit: ' ppm',
+      },
+      {
+        id: 2,
+        name: 'Cu',
+        value: Number(newShiftData.summary ? newShiftData.summary.gradeCu : newShiftData.gradeCu).toLocaleString(
+          navigator.languages,
+          {
+            minimumFractionDigits: 2,
+          },
+        ),
+        unit: ' %',
       },
       {
         id: 6,
-        name: 'pH',
-        value: newShiftData.tanks[0]
-          ? shiftData.tanks[0].ph
-            ? Number(shiftData.tanks[0].ph).toLocaleString(navigator.languages, {
-                minimumFractionDigits: 3,
-              })
-            : ''
-          : '',
+        name: 'S',
+        value: Number(shiftData.summary ? shiftData.summary.gradeS : shiftData.gradeS).toLocaleString(
+          navigator.languages,
+          {
+            minimumFractionDigits: 2,
+          },
+        ),
+
+        unit: ' %',
       },
     ];
   };
   let getColumns = () => {
     return [
-      { field: 'name', headerName: '', width: 160 },
-      { field: 'value', headerName: '', width: 200 },
+      { field: 'name', headerName: '', width: 160, align: 'left' },
+      { field: 'value', headerName: '', width: 180, align: 'right', cellClassName: 'mono-text' },
+      { field: 'unit', headerName: '', width: 100, cellClassName: 'unit-column' },
     ];
   };
 
@@ -109,15 +126,31 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
       <>
         <StyledCard userColor={userColor} sizePx={sizePx} {...derivedProps} data-testid="feed-data">
           <StyledPaper>
-            <Typography variant="h3">Feed</Typography>
+            <Typography variant="h3" padding={1} my={2}>
+              Feed
+            </Typography>
+
             <DataGridPro
               sx={{
                 border: 0,
-                '& .MuiDataGrid-cell': { fontSize: cuurentTheme.typography.h6 },
+                '& .MuiDataGrid-cell': { fontSize: currentTheme.typography.h5 },
+                '& data-colindex=1': { textAlign: 'right !important' },
                 '& .MuiDataGrid-columnHeaders': {
                   display: 'none', // Hides the entire header row
                 },
+                '& .unit-column': {
+                  paddingLeft: '1px !important', // override default padding
+                },
+                // Alternating row colors
+                '& .even-row': {
+                  backgroundColor: currentTheme.palette.action.hover + '!important',
+                },
+                '& .odd-row': {
+                  backgroundColor: currentTheme.palette.background.paper + '!important',
+                },
+                // ...generateColIndexStyles(theme),
               }}
+              getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
               columns={getColumns()}
               rows={getRows()}
               autoHeight

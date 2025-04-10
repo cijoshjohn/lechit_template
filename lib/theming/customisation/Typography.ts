@@ -5,6 +5,7 @@ export function odsThemeTypography(themeBuilder: Theme): TypographyOptions {
   return {
     fontFamily: themeBuilder.typography.fontFamily,
     allVariants: {
+      letterSpacing: '-0.9px',
       fontFeatureSettings: '"zero" 0, "liga" off, "clig" off',
     },
     body2SemiBold: {

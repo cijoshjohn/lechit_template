@@ -1,12 +1,12 @@
 import { ShiftData } from './ShiftData';
 
 interface RangeShiftDataInput {
-  summary: any; // Replace 'any' with the actual type if known
-  shifts: any[]; // Replace 'any' with the actual type if known
+  summary: unknown; // Replace 'any' with the actual type if known
+  shifts: unknown[]; // Replace 'any' with the actual type if known
 }
 
-class RangeShiftData {
-  summary: ShiftData | {};
+export class RangeShiftData {
+  summary: ShiftData | object;
   shifts: ShiftData[];
 
   constructor(rangeShiftData: RangeShiftDataInput) {

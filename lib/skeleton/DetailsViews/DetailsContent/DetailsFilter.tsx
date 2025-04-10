@@ -1,14 +1,31 @@
-import { Box, Button, Card, Stack } from '@mui/material';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Box, Button, Card, CardProps, Stack } from '@mui/material';
 import { OdsDateOption } from 'components/DateOption/OdsDateOption';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import dayjs from 'dayjs';
 import { Banner } from 'components/Banner/Banner';
+import { useState } from 'react';
+import { ShiftData } from 'models/ShiftData';
+import { useNavigate } from 'react-router-dom';
 
-const handleForecastAdjust = () => {};
+export type DetailsFilterProps = CardProps & {
+  shiftData: ShiftData | object;
+  onForecastShow: (isForecast: boolean) => void;
+};
 
 const handleShiftViewAdjust = () => {};
 
-export const DetailsFilter = () => {
+export const DetailsFilter = (props: DetailsFilterProps) => {
+  const { ...data } = props;
+
+  const [currentShiftData] = useState(data.shiftData);
+  const [isForecast, setIsForecast] = useState(true);
+
+  const handleForecastAdjust = () => {
+    setIsForecast(!isForecast);
+    data.onForecastShow(!isForecast);
+  };
+
   let today = dayjs();
   return (
     <Card sx={{ m: 1, p: 1, width: '100%', minHeight: 225 }}>
@@ -50,11 +67,17 @@ export const DetailsFilter = () => {
             Adjust Forecast
           </Button>
           <Banner
-            cumulativeResidenceTime={5456.7}
-            cyanideProfile_model_cn={455.8}
-            leachingProfile_recovered_au={56.8}
-            leachingProfile_recoverable_au={67.7}
-            cnAdded={34.8}
+            cnUsed={currentShiftData.summary ? currentShiftData.summary.cnUsed : currentShiftData.cnUsed}
+            cnConcTailing={
+              currentShiftData.summary ? currentShiftData.summary.cnConcTailing : currentShiftData.cnConcTailing
+            }
+            leachingProfile_recovered_au={
+              currentShiftData.summary ? currentShiftData.summary.auRecovered : currentShiftData.auRecovered
+            }
+            leachingProfile_recoverable_au={
+              currentShiftData.summary ? currentShiftData.summary.auProduced : currentShiftData.auProduced
+            }
+            cnAdded={currentShiftData.summary ? currentShiftData.summary.cnAdded : currentShiftData.cnAdded}
           ></Banner>
         </Stack>
 

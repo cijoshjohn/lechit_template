@@ -9,6 +9,21 @@ import { odsThemeComponents } from './customisation/Components';
 import { odsThemeColorSchemes } from './customisation/ColorSchemes';
 import { odsThemeTypography } from './customisation/Typography';
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    number: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    number?: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    number: true;
+  }
+}
 /**
  * Values that are used by multiple properties in {@link createBaseOdsThemeOptions}.
  */
@@ -29,7 +44,18 @@ function createBaseOdsThemeOptions(): CreateThemeOptions {
   const themeBuilder = createTheme({
     id: '',
     spacing,
-    typography: { fontFamily: 'Noto Sans, Arial, sans-serif' },
+    typography: {
+      fontFamily: 'Roboto, Arial, sans-serif',
+      number: {
+        fontFamily: 'Roboto Mono, monospace',
+        fontWeight: 400,
+        fontSize: '1rem', // adjust as needed
+        letterSpacing: '0.05em',
+      },
+      allVariants: {
+        letterSpacing: '-0.9px',
+      },
+    },
   });
 
   return {

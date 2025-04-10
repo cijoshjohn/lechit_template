@@ -23,6 +23,11 @@ export type OdsAvatarProps = {
    * Tank Details.
    */
   tankDetails: Array<Tank>;
+
+  /**
+   * On Slide change
+   */
+  slideChange: (index) => object;
 };
 
 const getTanks = (detailsForTankGrid: Array<Tank>): Array<unknown> => {
@@ -35,12 +40,12 @@ const getTanks = (detailsForTankGrid: Array<Tank>): Array<unknown> => {
           <Grid container spacing={1} direction="row" justifyContent="space-evenly" alignItems="stretch">
             <Grid>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 0 }}>
+                <img src={GoldTank} alt="GoldTank" width={300} />
                 <Chip
                   label={'Tank ' + item.tankNo}
                   variant={'outlined'}
-                  sx={{ marginBottom: '15px', marginLeft: '50px' }}
+                  sx={{ marginTop: '10px', marginLeft: '50px' }}
                 ></Chip>
-                <img src={GoldTank} alt="GoldTank" width={300} />
               </Box>
             </Grid>
           </Grid>
@@ -55,18 +60,40 @@ const getTanks = (detailsForTankGrid: Array<Tank>): Array<unknown> => {
  * A wrapper around MUI's {@link Avatar} component with auto-sizing and rendering of user's initials.
  */
 export function CaroselComponent(props: OdsAvatarProps): JSX.Element {
-  const { imageLink, type, totalNumber, tankDetails, ...derivedProps } = props;
+  const { imageLink, type, totalNumber, tankDetails, slideChange, ...derivedProps } = props;
 
-  const slideNo = useRef(0);
-  slideNo.current = 0;
+  let slideNo = 0;
 
-  useEffect(() => {}, []);
+  const handleKeyDownPrev = () => {
+    if (slideNo == 0) {
+      slideNo = tankDetails.length - 1;
+    } else {
+      slideNo = slideNo - 1;
+    }
+    slideChange(slideNo);
+  };
+  const handleKeyDownNext = () => {
+    if (slideNo == tankDetails.length - 1) {
+      slideNo = 0;
+    } else {
+      slideNo = slideNo + 1;
+    }
+    slideChange(slideNo);
+  };
+
+  useEffect(() => {
+    const imageElements = document.querySelectorAll('.css-1qzevvg img');
+    if (imageElements) {
+      if (imageElements[0]) imageElements[0].addEventListener('mousedown', handleKeyDownPrev);
+      if (imageElements[1]) imageElements[1].addEventListener('mousedown', handleKeyDownNext);
+    }
+  }, [tankDetails]);
 
   return (
     <Carousel
       slides={getTanks(tankDetails)}
-      slideNo={Number(slideNo.current)}
-      goToSlide={Number(slideNo.current)}
+      slideNo={Number(slideNo)}
+      goToSlide={Number(slideNo)}
       offsetRadius={5}
       showNavigation={true}
       autoPlay={false}

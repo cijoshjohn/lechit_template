@@ -1,8 +1,8 @@
 import { Box, BoxProps, Divider, Paper, Skeleton, Stack, styled, Typography, useTheme } from '@mui/material';
 
 export type BannerProps = BoxProps & {
-  cumulativeResidenceTime: number;
-  cyanideProfile_model_cn: number;
+  cnUsed: number;
+  cnConcTailing: number;
   leachingProfile_recovered_au: number;
   leachingProfile_recoverable_au: number;
   cnAdded: number;
@@ -10,8 +10,8 @@ export type BannerProps = BoxProps & {
 
 export function Banner(props: BannerProps): JSX.Element {
   const {
-    cumulativeResidenceTime,
-    cyanideProfile_model_cn,
+    cnUsed,
+    cnConcTailing,
     leachingProfile_recovered_au,
     leachingProfile_recoverable_au,
     cnAdded,
@@ -24,10 +24,14 @@ export function Banner(props: BannerProps): JSX.Element {
     width: '100%',
   }));
 
-  const displayValue = (value: number, unit: string) => {
+  const displayValue = (value: number, unit: string, decimalUnit: number) => {
     return (
-      <Typography variant="h4" noWrap>
-        {value} {unit}
+      <Typography variant="h4" className="mono-text" noWrap>
+        {Number(value).toLocaleString(navigator.languages, {
+          minimumFractionDigits: decimalUnit,
+          maximumFractionDigits: decimalUnit,
+        })}
+        {' ' + unit}
       </Typography>
     );
   };
@@ -51,11 +55,11 @@ export function Banner(props: BannerProps): JSX.Element {
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="body1" color="grey.400" noWrap>
-                    Recovered per hour
+                  <Typography variant="h5" color="grey.400" noWrap>
+                    Recovered
                   </Typography>
                   {leachingProfile_recovered_au ? (
-                    displayValue(leachingProfile_recovered_au, 'g/h')
+                    displayValue(leachingProfile_recovered_au, 'g/h', 1)
                   ) : (
                     <Skeleton width={'50%'} height={100}></Skeleton>
                   )}
@@ -64,11 +68,11 @@ export function Banner(props: BannerProps): JSX.Element {
                 <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="body1" color="grey.400" noWrap>
+                  <Typography variant="h5" color="grey.400" noWrap>
                     Recovery
                   </Typography>
                   {leachingProfile_recoverable_au ? (
-                    displayValue(leachingProfile_recoverable_au, '%')
+                    displayValue(leachingProfile_recoverable_au, '%', 1)
                   ) : (
                     <Skeleton width={'50%'} height={150}></Skeleton>
                   )}
@@ -84,21 +88,13 @@ export function Banner(props: BannerProps): JSX.Element {
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="body1" color="grey.400">
+                  <Typography variant="h5" color="grey.400">
                     Added
                   </Typography>
-                  {cnAdded ? displayValue(cnAdded, 'kg') : <Skeleton width={'50%'} height={150}></Skeleton>}
-                </StyledStack>
-
-                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
-
-                <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="body1" color="grey.400" noWrap>
-                    Used per hour
-                  </Typography>
                   {cnAdded ? (
-                    displayValue(cumulativeResidenceTime, 'kg/h')
+                    displayValue(cnAdded, 'kg', 2)
                   ) : (
+                    // two deciaml
                     <Skeleton width={'50%'} height={150}></Skeleton>
                   )}
                 </StyledStack>
@@ -106,12 +102,27 @@ export function Banner(props: BannerProps): JSX.Element {
                 <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="body1" color="grey.400" noWrap>
+                  <Typography variant="h5" color="grey.400" noWrap>
+                    Used per hour
+                  </Typography>
+                  {cnUsed ? (
+                    displayValue(cnUsed, 'kg/h', 2)
+                  ) : (
+                    //two decimal
+                    <Skeleton width={'50%'} height={150}></Skeleton>
+                  )}
+                </StyledStack>
+
+                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+
+                <StyledStack flexDirection="column" justifyContent="space-evenly">
+                  <Typography variant="h5" color="grey.400" noWrap>
                     Tailings Conc.
                   </Typography>
-                  {cyanideProfile_model_cn ? (
-                    displayValue(cyanideProfile_model_cn, 'ppm')
+                  {cnConcTailing ? (
+                    displayValue(cnConcTailing, 'ppm', 0)
                   ) : (
+                    // zero decimal
                     <Skeleton width={'50%'} height={150}></Skeleton>
                   )}
                 </StyledStack>

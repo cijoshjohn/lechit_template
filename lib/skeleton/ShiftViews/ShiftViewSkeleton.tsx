@@ -3,8 +3,7 @@ import { ShiftOverviewSkeleton } from '../ShiftViews/ShiftViewsContent/ShiftOver
 import { ShiftChartViewSkeleton } from './ShiftViewsContent/ShiftChartViewSkeleton';
 import { ShiftOverviewData } from 'models/ShiftOverviewData';
 import { OdsDateNaviation } from 'components/DateNavigation/OdsDateNaviation';
-import { useShiftContext } from '../../../src/contexts/ShiftContext'; //TODO: need to get the proper way for this path
-
+import { useShiftContext } from '../../../src/contexts/ShiftContext';
 export type ShiftViewSkeletonProps = BoxProps & {
   title: string;
   isDataLoaded: boolean;

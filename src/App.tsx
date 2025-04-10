@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import AppBar from 'components/AppBar';
 import SideBar from 'components/SideBar';
 
-import MainLayout from 'components/Pages/MainLayout';
 import SecondaryPage from 'components/Pages/SecondaryPage';
 import SampleForm from 'components/SampleForm/SampleForm';
 
@@ -17,10 +16,9 @@ import dayjs, { Dayjs } from 'dayjs';
 
 // import dummyShiftData from '../test_data/test_data.json'
 import ShiftFacade from 'services/ShiftFacade';
-import ScreenSizePage from 'components/Pages/ScreenSizePage';
+
 import { DetailSkelton } from '../lib/skeleton/DetailsViews/DetailSkelton';
 import { ForecastSkelton } from '../lib/skeleton/ForecastViews/ForecastSkelton';
-import MainPage from 'components/Pages/MainPage';
 
 function App() {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -58,7 +56,19 @@ function App() {
       <SideBar />
 
       <Routes>
-        <Route path="/" element={<MainLayout />} />
+        <Route
+          path="/"
+          element={
+            <ShiftContext.Provider value={{ currentShiftDate, setCurrentShiftDate }}>
+              <DashboardSkeleton
+                title="Demo App"
+                isDataLoaded={dataLoaded}
+                shiftChartData={shiftChartData}
+                shiftData={shiftOverviewData}
+              />
+            </ShiftContext.Provider>
+          }
+        />
         <Route path="/sec" element={<SecondaryPage />} />
         <Route path="/form" element={<SampleForm />} />
         <Route

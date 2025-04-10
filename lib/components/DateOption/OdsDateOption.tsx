@@ -1,17 +1,28 @@
 /* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { styled, Stack, Typography, FormControl, Select, MenuItem, InputLabel, IconButton } from '@mui/material';
+import {
+  styled,
+  Stack,
+  Typography,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  IconButton,
+  Popover,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import Calendar from '@mui/icons-material/Event';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { ArrowBackIos, ArrowForwardIos, CalendarToday } from '@mui/icons-material';
 
 interface OdsDateOptionProps extends DatePickerProps<Dayjs> {
   /**
@@ -65,12 +76,25 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
 
   const [dateMinLimit] = useState(minLimit);
   const [dateMaxLimit] = useState(maxLimit);
-  const [dateRangeData, setDateRangeData] = useState<[Dayjs, any]>([currentStartDate, endDateValue]);
+  const [dateRangeData, setDateRangeData] = useState<[Dayjs, unknown]>([
+    currentStartDate ? currentStartDate : dayjs(),
+    endDateValue,
+  ]);
   const [dateInStringFormat, setDateInStringFormat] = useState<string>();
   const [dateFixedValue, setDateFixedValue] = useState<number | string>(fixedDateRange ? fixedDateRange : 'unselected');
   const [isShowFixedDateSelection] = useState(showFixedDateSelection ? showFixedDateSelection : true);
   const [isShowSelectedDateLabel] = useState(showSelectedDateLabel ? showSelectedDateLabel : true);
   const [isShowDateRangeNavigation] = useState(showDateRangeNavigation ? showDateRangeNavigation : true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   // const theme = useTheme();
 
   const today = dayjs();
@@ -298,31 +322,31 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
         onChange={handleFixDateChange}
         sx={{ minWidth: 120 }}
       >
-        <MenuItem value={'unselected'} data-testid="unselected_option">
+        <MenuItem value={'unselected'} data-testid="unselected_option" className="mono-text">
           Select
         </MenuItem>
-        <MenuItem value={-1} data-testid="-1_option">
+        <MenuItem value={-1} data-testid="-1_option" className="mono-text">
           Yesterday
         </MenuItem>
-        <MenuItem value={0} data-testid="0_option">
+        <MenuItem value={0} data-testid="0_option" className="mono-text">
           Today
         </MenuItem>
-        <MenuItem value={1} data-testid="1_option">
+        <MenuItem value={1} data-testid="1_option" className="mono-text">
           Tomorrow
         </MenuItem>
-        <MenuItem value={7} data-testid="7_option">
+        <MenuItem value={7} data-testid="7_option" className="mono-text">
           Next 7 days
         </MenuItem>
-        <MenuItem value={-7} data-testid="-7_option">
+        <MenuItem value={-7} data-testid="-7_option" className="mono-text">
           Last 7 days
         </MenuItem>
-        <MenuItem value={-30} data-testid="-30_option">
+        <MenuItem value={-30} data-testid="-30_option" className="mono-text">
           Last 30 days
         </MenuItem>
         <MenuItem value={'this_month'} data-testid="this_month_option">
           This Month
         </MenuItem>
-        <MenuItem value={'last_month'} data-testid="last_month_option">
+        <MenuItem value={'last_month'} data-testid="last_month_option" className="mono-text">
           Last Month
         </MenuItem>
       </Select>
@@ -332,7 +356,7 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
   const MainLable = () => {
     return (
       <>
-        <Typography variant="h4" component="h4" data-testid="date-display">
+        <Typography variant="h4" component="h4" data-testid="date-display" className="mono-text">
           {dateInStringFormat}
         </Typography>
       </>
@@ -343,15 +367,6 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
     return (
       <>
         <Stack direction="row" spacing={1} alignItems="center">
-          {isShowFixedDateSelection ? (
-            <FormControl>
-              <InputLabel id="date-select-label"></InputLabel>
-              <FixedDatePicker />
-            </FormControl>
-          ) : (
-            <></>
-          )}
-
           {isShowDateRangeNavigation ? (
             <FormControl id="date-decrement-button">
               <IconButton
@@ -366,23 +381,63 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
           ) : (
             <></>
           )}
+          {isShowFixedDateSelection ? (
+            <FormControl>
+              <InputLabel id="date-select-label"></InputLabel>
+              <FixedDatePicker />
+            </FormControl>
+          ) : (
+            <></>
+          )}
 
           <FormControl data-testid="date-picker-range">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <StyledDateOption
                 sx={{
                   minWidth: 275,
+                  '& .MuiInputBase-input': { display: 'none' },
+                  '& .MuiOutlinedInput-notchedOutline': { display: 'none' },
                 }}
-                slots={{ field: SingleInputDateRangeField }}
+                slots={{ field: IconButton }}
                 slotProps={{ textField: { InputProps: { endAdornment: <Calendar /> } } }}
                 name="allowedRange"
                 onChange={handleDateChange}
                 format="YYYY-MM-DD"
                 minDate={dateMinLimit}
                 maxDate={dateMaxLimit}
-                value={dateRangeData}
+                value={dateRangeData ? dateRangeData : [dayjs(), null]}
                 align={''}
               />
+            </LocalizationProvider> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <IconButton onClick={handleClick}>
+                <CalendarToday />
+              </IconButton>
+
+              <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              >
+                <StyledDateOption
+                  /* sx={{
+                    minWidth: 275,
+                    '& .MuiInputBase-input': { display: 'none' },
+                    '& .MuiOutlinedInput-notchedOutline': { display: 'none' },
+                  }} */
+                  //slots={{ field: sin }}
+                  //slotProps={{ textField: { InputProps: { endAdornment: <Calendar /> } } }}
+                  name="allowedRange"
+                  onChange={handleDateChange}
+                  format="YYYY-MM-DD"
+                  minDate={dateMinLimit}
+                  maxDate={dateMaxLimit}
+                  value={dateRangeData ? dateRangeData : [dayjs(), null]}
+                  align={''}
+                />
+              </Popover>
             </LocalizationProvider>
           </FormControl>
 
@@ -408,7 +463,7 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="flex-start">
-        <Typography variant="h6" component="h6">
+        <Typography variant="h4" component="h6">
           Details
         </Typography>
         {MainLable()}

@@ -1,4 +1,5 @@
-import { styled } from '@mui/material';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { styled, useTheme } from '@mui/material';
 import { DataGridPro, DataGridProProps } from '@mui/x-data-grid-pro';
 
 export type OdsGridPorps = DataGridProProps & {
@@ -31,6 +32,7 @@ export function OdsGridComponent(props: OdsGridPorps) {
   let { gridRows, gridColumns, gridPageSize, gridPerPageOptions } = props;
   gridPageSize = gridPageSize ? gridPageSize : 10;
   gridPerPageOptions = gridPerPageOptions ? gridPerPageOptions : [5, 10, 25, { value: -1, label: 'All' }];
+  const currentTheme = useTheme();
 
   return (
     <StyledGrid
@@ -41,6 +43,16 @@ export function OdsGridComponent(props: OdsGridPorps) {
           paginationModel: { pageSize: gridPageSize, page: 0 },
         },
       }}
+      sx={{
+        // Alternating row colors
+        '& .even-row': {
+          backgroundColor: currentTheme.palette.action.hover + '!important',
+        },
+        '& .odd-row': {
+          backgroundColor: currentTheme.palette.background.paper + '!important',
+        },
+      }}
+      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
       pageSizeOptions={gridPerPageOptions}
     ></StyledGrid>
   );
