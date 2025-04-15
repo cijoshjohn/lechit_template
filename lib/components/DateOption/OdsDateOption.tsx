@@ -81,6 +81,7 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
     endDateValue,
   ]);
   const [dateInStringFormat, setDateInStringFormat] = useState<string>();
+  const [shiftSelected, setShiftSelected] = useState<string>('unselected');
   const [dateFixedValue, setDateFixedValue] = useState<number | string>(fixedDateRange ? fixedDateRange : 'unselected');
   const [isShowFixedDateSelection] = useState(showFixedDateSelection ? showFixedDateSelection : true);
   const [isShowSelectedDateLabel] = useState(showSelectedDateLabel ? showSelectedDateLabel : true);
@@ -127,9 +128,9 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
       let formattedStartDate = '';
       let formattedEndDate = '';
       if (startDate) {
-        formattedStartDate = `${startDate.year()} , ${startDate.format('MMM')} ${startDate.date()}`;
+        formattedStartDate = `${startDate.year()},${startDate.format('MMM')} ${startDate.date()}`;
         if (endDate) {
-          formattedEndDate = '-' + endDate.format('MMM') + ' ' + endDate.date();
+          formattedEndDate = '- ' + endDate.format('MMM') + ' ' + endDate.date();
         }
 
         const formattedDateRange = `${formattedStartDate}  ${formattedEndDate}`;
@@ -212,6 +213,10 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
         handleDateChange([newDatefirst, newDateLast]);
       }
     }
+  };
+
+  const handleShiftChange = (newValue: object) => {
+    setShiftSelected(newValue?.target?.value);
   };
 
   // const AnalyzeDateRange = (dates) => {
@@ -322,8 +327,8 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
         onChange={handleFixDateChange}
         sx={{ minWidth: 120 }}
       >
-        <MenuItem value={'unselected'} data-testid="unselected_option" className="mono-text">
-          Select
+        <MenuItem value={'unselected'} data-testid="unselected_option">
+          <Typography variant="body1">Select</Typography>
         </MenuItem>
         <MenuItem value={-1} data-testid="-1_option" className="mono-text">
           Yesterday
@@ -343,7 +348,7 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
         <MenuItem value={-30} data-testid="-30_option" className="mono-text">
           Last 30 days
         </MenuItem>
-        <MenuItem value={'this_month'} data-testid="this_month_option">
+        <MenuItem value={'this_month'} data-testid="this_month_option" className="mono-text">
           This Month
         </MenuItem>
         <MenuItem value={'last_month'} data-testid="last_month_option" className="mono-text">
@@ -356,10 +361,34 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
   const MainLable = () => {
     return (
       <>
-        <Typography variant="h4" component="h4" data-testid="date-display" className="mono-text">
+        <Typography variant="h4" component="h4" data-testid="date-display" className="mono-text" paddingBottom={5}>
           {dateInStringFormat}
         </Typography>
       </>
+    );
+  };
+
+  const FixedShiftPicker = () => {
+    return (
+      <Select
+        labelId="shift-select-label"
+        id="shift-select"
+        //label="Fixed range"
+        data-testid="shift-fixed-range"
+        value={shiftSelected}
+        onChange={handleShiftChange}
+        sx={{ minWidth: 120 }}
+      >
+        <MenuItem value={'unselected'} data-testid="unselected_option">
+          <Typography variant="body1">Select Shift</Typography>
+        </MenuItem>
+        <MenuItem value={'A'} data-testid="-1_option" className="mono-text">
+          Day
+        </MenuItem>
+        <MenuItem value={'P'} data-testid="0_option" className="mono-text">
+          Night
+        </MenuItem>
+      </Select>
     );
   };
 
@@ -455,6 +484,8 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
           ) : (
             <></>
           )}
+
+          {isShowDateRangeNavigation ? FixedShiftPicker() : <></>}
         </Stack>
       </>
     );
@@ -462,11 +493,10 @@ export function OdsDateOption(props: OdsDateOptionProps): JSX.Element {
 
   return (
     <>
-      <Stack direction="column" spacing={2} alignItems="flex-start">
-        <Typography variant="h4" component="h6">
-          Details
-        </Typography>
+      <Stack direction="column" spacing={1} alignItems="flex-start">
         {MainLable()}
+        <div></div>
+        <div></div>
         {DateSection()}
       </Stack>
     </>

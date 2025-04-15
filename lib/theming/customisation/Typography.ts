@@ -5,7 +5,7 @@ export function odsThemeTypography(themeBuilder: Theme): TypographyOptions {
   return {
     fontFamily: themeBuilder.typography.fontFamily,
     allVariants: {
-      letterSpacing: '-0.9px',
+      //letterSpacing: '-0.9px',
       fontFeatureSettings: '"zero" 0, "liga" off, "clig" off',
     },
     body2SemiBold: {
@@ -20,6 +20,10 @@ export function odsThemeTypography(themeBuilder: Theme): TypographyOptions {
       fontWeight: 400,
       lineHeight: '133%',
       letterSpacing: '0.08px',
+    },
+    h6: {
+      ...themeBuilder.typography.h6,
+      letterSpacing: '1px',
     },
     sideNavGroupHeading: {
       ...themeBuilder.typography.body2,

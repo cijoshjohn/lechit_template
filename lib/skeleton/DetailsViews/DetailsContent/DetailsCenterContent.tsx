@@ -8,7 +8,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import React, { useEffect, useMemo, useState } from 'react';
 import OdsSingleGauge from 'components/GraphComponent/Graph/OdsSingleGauge/OdsSingleGaugeChart';
 import { CaroselComponent } from 'components/Carosel/CaroselComponent';
-import { day1 } from '../../../../src/stories/assets/StubShiftData';
+import { day1 } from '../../../../src/stories/NewStubshiftData';
 import { Code, GridView } from '@mui/icons-material';
 import { OdsGridComponent } from 'components/Grid/OdsGridComponent';
 import {
@@ -61,7 +61,9 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
     return (
       <>
         <Stack direction={'row'} justifyContent={'space-between'}>
-          <Typography variant="h3">Tanks</Typography>
+          <Typography variant="h3" fontSize={'2.5rem!important'}>
+            Tanks
+          </Typography>
           <Stack direction={'row'} justifyContent={'flex-end'}>
             <IconButton
               aria-label="main"
@@ -91,30 +93,85 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
         <StyledStack
           flexDirection="column"
           justifyContent="center"
-          padding={theme.spacing(4)}
-          sx={{ backgroundColor: theme.palette.background.default }}
+          padding={theme.spacing(1)}
+          border={0.1}
+          sx={{ backgroundColor: theme.palette.action.focus, width: '100%', overflowX: 'auto' }}
         >
-          <StyledStack flexDirection="row" justifyContent="flex-start" mx={0}>
+          <StyledStack flexDirection="row" justifyContent="flex-start" p={1}>
             <Typography variant="h4">{data.mainHeading}</Typography>
           </StyledStack>
-          <StyledStack flexDirection="row" justifyContent="space-between">
+          {/* <StyledStack flexDirection="row" justifyContent="flex-start" p={1}>
             {data.details.map((element, index) => (
               <div key={element.name}>
-                <Typography variant="h6" color="grey.600" noWrap>
-                  {element.name}
-                </Typography>
+                <Stack direction={'column'}>
+                  <Typography variant="h6" noWrap>
+                    {element.name}
+                  </Typography>
 
-                <Stack direction={'row'} gap={1}>
-                  <Typography variant="h4" noWrap className="mono-text">
-                    {element.value}
+                  <Stack direction={'row'} gap={1}>
+                    <Typography
+                      variant="h5"
+                      color="overlays[0]"
+                      noWrap
+                      className="mono-text"
+                      sx={{ letterSpacing: '-0.1px!important' }}
+                    >
+                      {element.value}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      color="overlays[0]"
+                      noWrap
+                      className="mono-text"
+                      sx={{ letterSpacing: '-0.1px!important' }}
+                    >
+                      {element.unit}
+                    </Typography>
+                  </Stack>
+                </Stack>
+                {index == 0 ? (
+                  <Divider orientation="vertical" variant="middle" flexItem sx={{ borderRightWidth: 4 }} />
+                ) : (
+                  <></>
+                )}
+              </div>
+            ))}
+          </StyledStack> */}
+
+          <StyledStack flexDirection="row" justifyContent="space-around" p={1}>
+            {data.details.map((element, index) => (
+              <React.Fragment key={index}>
+                <Stack direction="column">
+                  <Typography variant="h6" noWrap>
+                    {element.name}
                   </Typography>
-                  <Typography variant="h4" noWrap className="mono-text">
-                    {element.unit}
-                  </Typography>
+                  <Stack direction="row" gap={1}>
+                    <Typography
+                      variant="h5"
+                      color="overlays[0]"
+                      noWrap
+                      className="mono-text"
+                      sx={{ letterSpacing: '-0.1px!important' }}
+                    >
+                      {element.value}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      color="overlays[0]"
+                      noWrap
+                      className="mono-text"
+                      sx={{ letterSpacing: '-0.1px!important' }}
+                    >
+                      {element.unit}
+                    </Typography>
+                  </Stack>
                 </Stack>
 
-                {index == 0 ? <Divider orientation="vertical" variant="middle" flexItem sx={{ opacity: 1 }} /> : <></>}
-              </div>
+                {/* Insert divider BETWEEN items, not after the last one */}
+                {index < data.details.length - 1 && (
+                  <Divider orientation="vertical" flexItem sx={{ mx: 2, borderRightWidth: 4 }} />
+                )}
+              </React.Fragment>
             ))}
           </StyledStack>
         </StyledStack>
@@ -131,6 +188,7 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
             navigator.languages,
             {
               minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
             },
           ),
           unit: ' g/h',
@@ -141,6 +199,7 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
             navigator.languages,
             {
               minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
             },
           ),
           unit: ' g/h',
@@ -156,7 +215,8 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           value: Number(currentShiftData.tanks[currentTankIndex].cumulativeResidenceTime).toLocaleString(
             navigator.languages,
             {
-              minimumFractionDigits: 2,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
             },
           ),
           unit: ' min',
@@ -166,7 +226,8 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           value: Number(currentShiftData.tanks[currentTankIndex].cyanideProfile.model_cn).toLocaleString(
             navigator.languages,
             {
-              minimumFractionDigits: 2,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
             },
           ),
           unit: ' ppm',
@@ -176,16 +237,14 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
     };
     return (
       <>
-        <Grid container spacing={5} margin={1}>
-          <Grid size={{ xs: 1, md: 1, lg: 1, xl: 1 }}></Grid>
-          <Grid size={{ xs: 5, md: 5, lg: 5, xl: 5 }}>
+        <Grid container spacing={2} margin={1}>
+          <Grid size={{ xs: 6, md: 6, lg: 6, xl: 6 }}>
             <Box width={'100%'}>{MainData(goldDetails)}</Box>
           </Grid>
 
-          <Grid size={{ xs: 5, md: 5, lg: 5, xl: 5 }}>
+          <Grid size={{ xs: 6, md: 6, lg: 6, xl: 6 }}>
             <Box width={'100%'}>{MainData(cyanideDetails)}</Box>
           </Grid>
-          <Grid size={{ xs: 1, md: 1, lg: 1, xl: 1 }}></Grid>
         </Grid>
       </>
     );
@@ -195,11 +254,11 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
     return (
       <>
         <OdsGridComponent
-          gridRows={[]}
+          gridRows={day1.tanks}
           gridColumns={tankColumns}
           gridPageSize={0}
           gridPerPageOptions={[]}
-          columnGroupingModel={columnGroupingBase}
+          columnGroupingModel={[]}
           columns={[]}
         ></OdsGridComponent>
       </>
@@ -274,7 +333,11 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
   const ConcentrateGaugeChart = useMemo(
     () => (
       <OdsSingleGauge
-        gaugevalue={currentShiftData['summary'] ? currentShiftData['summary'].auProduced : currentShiftData.auProduced}
+        gaugevalue={
+          currentShiftData['summary']
+            ? Number(currentShiftData['summary'].auProduced).toFixed(2).toString()
+            : Number(currentShiftData.auProduced).toFixed(2).toString()
+        }
         title="Concentrate"
         titlePosition="top"
         maxValue={currentShiftData['summary'] ? currentShiftData['summary'].auTotal : currentShiftData.auTotal}
@@ -290,7 +353,9 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
     () => (
       <OdsSingleGauge
         gaugevalue={
-          currentShiftData['summary'] ? currentShiftData['summary'].cnConcTailing : currentShiftData.cnConcTailing
+          currentShiftData['summary']
+            ? Number(currentShiftData['summary'].cnConcTailing).toFixed().toString()
+            : Number(currentShiftData.cnConcTailing).toFixed().toString()
         }
         title="Tailings"
         titlePosition="top"
@@ -304,17 +369,9 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
   );
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-      width="100%"
-      sx={{ gap: 2 }}
-    >
+    <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center" width="100%" sx={{ gap: 2 }}>
       <Box sx={{ flexGrow: 1, m: theme.spacing(0) }}>
-        <Grid container spacing={2} p={3} justifyContent={'center'} alignContent={'center'} alignItems={'center'}>
+        <Grid container spacing={2} p={2} justifyContent={'center'} alignContent={'center'} alignItems={'flex-start'}>
           <Grid size={{ xs: 2.5, md: 2.5, lg: 2.5, xl: 2.5 }} height={'100%'}>
             <FeedDetails shiftData={data.shiftData} sizePx={0}></FeedDetails>
           </Grid>
@@ -330,12 +387,12 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           <Grid size={{ xs: 2.5, md: 2.5, lg: 2.5, xl: 2.5 }}>
             <Grid container spacing={2} p={0} justifyContent={'center'} alignContent={'center'} alignItems={'center'}>
               <Grid>
-                <Paper sx={{ p: 2 }}>{ConcentrateGaugeChart}</Paper>
+                <Paper sx={{ p: 1, height: '30vh' }}>{ConcentrateGaugeChart}</Paper>
               </Grid>
               <Grid>
-                <Paper sx={{ p: 2 }}>{TailingsGaugeChart}</Paper>
+                <Paper sx={{ p: 1, height: '30vh' }}>{TailingsGaugeChart}</Paper>
               </Grid>
-            </Grid>
+            </Grid>{' '}
           </Grid>
         </Grid>
       </Box>

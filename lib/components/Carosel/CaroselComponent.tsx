@@ -1,4 +1,4 @@
-import { Box, Chip, Grid2 as Grid } from '@mui/material';
+import { Box, Chip, Grid2 as Grid, useTheme } from '@mui/material';
 import GoldTank from 'assets/images/GoldTankImage.png';
 import { Tank } from 'models/ShiftData';
 import { useEffect, useRef, useState } from 'react';
@@ -32,6 +32,7 @@ export type OdsAvatarProps = {
 
 const getTanks = (detailsForTankGrid: Array<Tank>): Array<unknown> => {
   let results = [];
+  let theme = useTheme();
   detailsForTankGrid.map((item, index) =>
     results.push({
       key: index,
@@ -40,11 +41,11 @@ const getTanks = (detailsForTankGrid: Array<Tank>): Array<unknown> => {
           <Grid container spacing={1} direction="row" justifyContent="space-evenly" alignItems="stretch">
             <Grid>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 0 }}>
-                <img src={GoldTank} alt="GoldTank" width={300} />
+                <img src={GoldTank} alt="GoldTank" width={250} />
                 <Chip
                   label={'Tank ' + item.tankNo}
                   variant={'outlined'}
-                  sx={{ marginTop: '10px', marginLeft: '50px' }}
+                  sx={{ marginTop: '10px', marginLeft: '50px', fontSize: theme.typography.h4.fontSize }}
                 ></Chip>
               </Box>
             </Grid>

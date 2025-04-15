@@ -1,58 +1,57 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-base-to-string */
 import { Tooltip } from '@mui/material';
-import { convertDigits, convertPriceVal } from './config';
+import { convertDigits, convertPriceVal, convertNum } from './config';
 
 const tankColumns = [
-  { field: 'tankNo', headerName: 'Tank No', valueGetter: (params) => `${params.row.tankNo || ''}` },
+  {
+    field: 'tankNo',
+    headerName: 'Tank No',
+    valueGetter: (_value, row) => `${row?.tankNo ?? ''}`,
+  },
   {
     field: 'cumulativeResidenceTime',
     headerName: 'Cumulative Residence time (min)',
     flex: 1,
-    valueGetter: (params) => `${params.row.cumulativeResidenceTime || ''}`,
+    valueGetter: (_value, row) =>
+      `${(row?.cumulativeResidenceTime ? Number(convertNum(row?.cumulativeResidenceTime, 2, 2)).toFixed() : '') ?? ''}`,
   },
-
   {
-    field: 'leachingProfile.model_au',
+    field: 'model_au',
     headerName: 'Total (g/h)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.leachingProfile.model_au) || ''}`,
+    valueGetter: (_value, row) => `${convertNum(row?.leachingProfile?.model_au, 2, 2) ?? ''}`,
   },
   {
-    field: 'leachingProfile.recoverable_au',
+    field: 'recoverable_au',
     headerName: 'Recoverable (g/h)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.leachingProfile.recoverable_au) || ''}`,
+    valueGetter: (_value, row) => `${convertNum(row?.leachingProfile?.recoverable_au, 2, 2) ?? ''}`,
   },
   {
-    field: 'leachingProfile.inaccessible_au',
+    field: 'inaccessible_au',
     headerName: 'Inaccessible (g/h)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.leachingProfile.inaccessible_au) || ''}`,
+    valueGetter: (_value, row) => `${convertNum(row?.leachingProfile?.inaccessible_au, 2, 2) ?? ''}`,
   },
-
   {
     field: 'cnadded',
     headerName: 'Added (kg/t)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cnadded) || ''}`,
+    valueGetter: (_value, row) => `${convertNum(row?.cnadded, 2, 2) ?? ''}`,
   },
   {
-    field: 'cyanideProfile.model_cn',
+    field: 'model_cn',
     headerName: 'CN- Conc (ppm)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cyanideProfile.model_cn) || ''}`,
+    valueGetter: (_value, row) => `${Number(convertNum(row?.cyanideProfile?.model_cn, 0, 0)).toFixed() ?? ''}`,
   },
   {
-    field: 'cyanideProfile.model_cu',
-    headerName: 'CuCN Conc (ppm)',
+    field: 'model_s',
+    headerName: 'S(CN)₂ (ppm)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cyanideProfile.model_cu) || ''}`,
-  },
-  {
-    field: 'cyanideProfile.model_s',
-    headerName: 'S(CN)2 (ppm)',
-    flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cyanideProfile.model_s) || ''}`,
+    valueGetter: (_value, row) => `${Number(convertNum(row?.cyanideProfile?.model_s, 0, 0)).toFixed() ?? ''}`,
   },
 ];
 

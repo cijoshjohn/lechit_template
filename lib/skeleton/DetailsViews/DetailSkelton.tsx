@@ -2,7 +2,8 @@ import { Box, BoxProps, Skeleton } from '@mui/material';
 import { DetailsHeader } from './DetailsContent/DetailsHeader';
 import { DetailsFilter } from './DetailsContent/DetailsFilter';
 import { DetailsCenterContent } from './DetailsContent/DetailsCenterContent';
-import { day1, weeklyResult } from '../../../src/stories/assets/StubShiftData';
+//import { day1, weeklyResult } from '../../../src/stories/assets/StubShiftData';
+import { day1 } from '../../../src/stories/NewStubshiftData';
 import { useState } from 'react';
 import { ForecastSkelton } from 'skeleton/ForecastViews/ForecastSkelton';
 export type DetailSkeltonProps = BoxProps & {
@@ -26,19 +27,6 @@ export const DetailSkelton = () => {
         height: 175,
       }}
     >
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1,
-          //height: 175,
-        }}
-      >
-        <DetailsHeader pageName={''} highlightData={[]}></DetailsHeader>
-      </Box>
       <DetailsFilter
         shiftData={day1}
         onForecastShow={function (isForecast: boolean): void {

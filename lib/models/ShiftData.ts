@@ -9,6 +9,7 @@ export interface Tank {
   vtank: number;
   cnadded: number;
   ph: number;
+  fractionsolids: number;
   cumulativeResidenceTime: number;
   leachingProfile: {
     model_au: number;
@@ -47,6 +48,13 @@ interface ShiftDataProps {
   cnConcTailing: number;
   maxCnConcTailing: number;
   feedDistribution: FeedDistribution;
+  num_tanks: number;
+  optimiser_duration: number;
+  timestamp: string;
+  RecordID: string;
+  resultId: string;
+  recordType: string;
+  streamID: string;
 }
 
 interface LeachingProfile {
@@ -84,6 +92,7 @@ export class ShiftData {
   auRecoveryAsPercentage: number;
   kgsPerTonneCnadded: number;
   feedDistribution: FeedDistribution;
+  num_tanks: number;
 
   constructor(shiftData: ShiftDataProps) {
     this.shiftId = shiftData.shiftId;

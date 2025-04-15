@@ -32,7 +32,6 @@ interface mainDetailsValues {
 
 export const ForecastMainContent = (props: ForecastMainContentProps) => {
   const { ...headerDetails } = props;
-  const theme = useTheme();
 
   const StyledStack = styled(Stack)(() => ({
     display: 'flex',
@@ -43,18 +42,23 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
   const MainData = (data: mainDetailsValues) => {
     return (
       <>
-        <StyledStack flexDirection="column" justifyContent="space-evenly" padding={theme.spacing(2)}>
+        <StyledStack
+          flexDirection="column"
+          justifyContent="space-evenly"
+          padding={theme.spacing(2)}
+          sx={{ backgroundColor: theme.palette.background.default }}
+        >
           <StyledStack flexDirection="row" justifyContent="flex-start" mx={5}></StyledStack>
-          <StyledStack flexDirection="row" justifyContent="space-evenly">
-            {data.details.map((element) => (
+          <StyledStack flexDirection="row" justifyContent="flex-start" gap={3}>
+            {data.details.map((element, index) => (
               <div key={element.name}>
-                <Typography variant="h6" color="grey.400" noWrap>
+                <Typography variant="h6" color="grey.600" noWrap>
                   {element.name}
                 </Typography>
-                <Typography variant="h4" noWrap>
+                <Typography variant="h5" noWrap className="mono-label">
                   {element.value} {element.unit}
                 </Typography>
-                <Divider />
+                {index == 0 ? <Divider orientation="vertical" variant="middle" flexItem sx={{ opacity: 1 }} /> : <></>}
               </div>
             ))}
           </StyledStack>
@@ -69,16 +73,16 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
         {
           name: 'Gold Recovered',
           value: Number(43).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '(g/h)',
+          unit: 'g/h',
         },
         {
           name: 'Gold Recovery',
           value: Number(45).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '(%)',
+          unit: '%',
         },
       ],
       mainHeading: 'Gold',
@@ -89,23 +93,23 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
         {
           name: 'CN Added ',
           value: Number(4).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '(kg/t)',
+          unit: 'kg/t',
         },
         {
           name: 'CN Used ',
           value: Number(56).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '(kg/h)',
+          unit: 'kg/h',
         },
         {
           name: 'Tailings CN',
           value: Number(56).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '(ppm)',
+          unit: 'ppm',
         },
       ],
       mainHeading: 'Cyanide',
@@ -115,9 +119,9 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
         {
           name: 'Total Value ',
           value: Number(4).toLocaleString(navigator.languages, {
-            minimumFractionDigits: 3,
+            minimumFractionDigits: 2,
           }),
-          unit: '($/h)',
+          unit: '$/h',
         },
       ],
       mainHeading: 'total',
@@ -146,13 +150,16 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
           direction="row"
           sx={{
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             flexGrow: 1,
+            height: '70vh',
           }}
         >
-          <Grid size={3}>sdf</Grid>
-          <Grid size={9}>
-            <Stack direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+          <Grid size={3}>
+            <Paper sx={{ width: '100%', height: '100%', backgroundColor: theme.palette.background.paper }}>ss</Paper>
+          </Grid>
+          <Grid size={9} sx={{ backgroundColor: theme.palette.background.paper }}>
+            <Stack direction={{ xs: 'column', sm: 'column' }} spacing={2} flex={1} m={2}>
               <Stack
                 direction={{ xs: 'row', sm: 'row' }}
                 justifyContent={'space-btween'}
@@ -160,7 +167,7 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
                 height={10}
                 flex={1}
                 spacing={2}
-                p={3}
+                p={0}
               >
                 <Button
                   data-testid="forecast-setbase"
@@ -175,7 +182,9 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
 
                 {MainHighlightData()}
               </Stack>
-              <ForecastGrid shiftData={undefined}></ForecastGrid>
+              <Paper sx={{ height: '100%' }}>
+                <ForecastGrid shiftData={undefined}></ForecastGrid>
+              </Paper>
             </Stack>
           </Grid>
         </Grid>
@@ -184,6 +193,7 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
   };
 
   let today = dayjs();
+  const theme = useTheme();
   return (
     <Box
       display="flex"
@@ -194,7 +204,7 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
       width="100%"
       sx={{ gap: 2 }}
     >
-      {withData(theme)}
+      {withData()}
     </Box>
   );
 };

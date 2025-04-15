@@ -8,23 +8,27 @@ import { useEffect, useState } from 'react';
 let defaultGraphOptions = {
   chart: {
     type: 'solidgauge',
-
-    height: null,
-    width: null,
+    //width: '100%',
+    //height: 350,
   },
 
   title: {
-    text: null,
+    text: 'Title',
+    floating: true,
+    align: 'left',
+    //x: 20,
+    //y: 40,
     style: {
       color: 'white',
       align: 'left',
-      fontWeight: '600',
+
+      //fontWeight: '600',
     },
   },
 
   pane: {
     center: ['50%', '20%'],
-    size: '130%',
+    size: '100%',
     startAngle: -90,
     endAngle: 90,
     background: {
@@ -54,12 +58,12 @@ let defaultGraphOptions = {
     labels: {
       align: 'center',
       x: 5,
-      y: 30,
+      y: 20,
       style: {
-        color: 'background.gaugevalues',
+        color: 'primary',
         fontSize: '',
         useHTML: true,
-        format: `<span class="mono-label" style="font-family: 'Roboto Mono', monospace;>this.value</span>`,
+        format: `<span style="font-family: 'Roboto Mono', monospace;>this.value</span>`,
       },
     },
     title: {
@@ -76,7 +80,7 @@ let defaultGraphOptions = {
           color: 'background.gaugevalues',
           radius: '70%',
           innerRadius: '100%',
-          y: 0,
+          y: 50,
           borderWidth: 0,
         },
       ],
@@ -101,8 +105,8 @@ let defaultGraphOptions = {
       color: 'primary.main',
     },
 
-    //verticalAlign: 'bottom', // Align to the bottom
-    // y: 50, // Adjust vertical position as needed
+    verticalAlign: 'bottom', // Align to the bottom
+    y: -100, // Adjust vertical position as needed
   },
 };
 
@@ -123,30 +127,37 @@ export function OdsSingleGauge(props: OdsSingleGaugeGraphComponentProps): JSX.El
   useEffect(() => {}, [gaugevalue, title, maxValue, titlePosition]);
   const theme = useTheme();
   let baseSingleGaugeConfig = JSON.parse(JSON.stringify(defaultGraphOptions));
-  baseSingleGaugeConfig.series[0].data[0].y = gaugevalue;
-  baseSingleGaugeConfig.series[0].data[0].color = theme.palette.background['gaugevalue'];
+  baseSingleGaugeConfig.series[0].data[0].y = Number(gaugevalue);
+  baseSingleGaugeConfig.series[0].data[0].color = theme.palette.background['actuals'];
   baseSingleGaugeConfig.yAxis.min = 0;
   baseSingleGaugeConfig.yAxis.max = maxValue;
   baseSingleGaugeConfig.title.text = newTitle;
-  baseSingleGaugeConfig.title.style.fontSize = theme.typography.h2.fontSize;
-  baseSingleGaugeConfig.title.style.align = 'left';
+  const rawFontSize = theme.typography.h3.fontSize;
+  const baseFontSize = typeof rawFontSize === 'string' ? parseFloat(rawFontSize) : rawFontSize;
+  baseSingleGaugeConfig.title.style.fontSize = `${baseFontSize + 0.5}rem`;
+  baseSingleGaugeConfig.title.style['fontFamily'] = theme.typography.h3.fontFamily;
+  baseSingleGaugeConfig.title.style['fontWeight'] = theme.typography.h3.fontWeight;
+
   baseSingleGaugeConfig.caption.text = footerTitle;
-  baseSingleGaugeConfig.title.align = 'left';
+
+  baseSingleGaugeConfig.pane.background.backgroundColor = theme.palette.grey[500];
   // baseSingleGaugeConfig.title.style.fontWeight = 400;
 
   baseSingleGaugeConfig.title.verticalAlign = titlePosition;
   let unitColor = theme.palette.text.primary;
   baseSingleGaugeConfig.series[0].dataLabels.format =
     '<span class="mono-text" style="font-size: ' +
-    theme.typography.h4.fontSize +
+    theme.typography.h5.fontSize +
     '; display:inline; font-weight: ' +
-    theme.typography.h4.fontWeight +
+    theme.typography.h5.fontWeight +
     '; color: ' +
     theme.palette.text.primary +
     ';">{point.y} ' +
     (unit ?? '') +
     '</span>';
-  baseSingleGaugeConfig.series[0].data.color = mainColor ?? 'background.gaugevalues';
+
+  baseSingleGaugeConfig.series[0]['dataLabels']['y'] = -80;
+
   if (derivedProps?.sx?.height) {
     baseSingleGaugeConfig.chart['height'] = derivedProps.sx.height;
   }
@@ -154,10 +165,10 @@ export function OdsSingleGauge(props: OdsSingleGaugeGraphComponentProps): JSX.El
     baseSingleGaugeConfig.chart['width'] = derivedProps.sx.width;
   }
 
-  baseSingleGaugeConfig.yAxis.title['y'] = titlePosition === 'bottom' ? 90 : -60;
-  baseSingleGaugeConfig.pane.center[1] = titlePosition === 'bottom' ? '10%' : '90%';
+  baseSingleGaugeConfig.yAxis.title['y'] = titlePosition === 'bottom' ? 90 : -10;
+  baseSingleGaugeConfig.pane.center[1] = titlePosition === 'bottom' ? '5%' : '70%';
 
-  baseSingleGaugeConfig.yAxis.labels.style.fontSize = theme.typography.h4.fontSize;
+  baseSingleGaugeConfig.yAxis.labels.style.fontSize = theme.typography.h5.fontSize;
   baseSingleGaugeConfig.yAxis.labels.style.color = theme.palette.text.primary;
 
   return (

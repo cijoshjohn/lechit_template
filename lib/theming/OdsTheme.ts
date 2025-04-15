@@ -50,10 +50,10 @@ function createBaseOdsThemeOptions(): CreateThemeOptions {
         fontFamily: 'Roboto Mono, monospace',
         fontWeight: 400,
         fontSize: '1rem', // adjust as needed
-        letterSpacing: '0.05em',
+        //letterSpacing: '0.05em',
       },
       allVariants: {
-        letterSpacing: '-0.9px',
+        //letterSpacing: '-0.9px',
       },
     },
   });

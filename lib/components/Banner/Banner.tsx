@@ -26,7 +26,7 @@ export function Banner(props: BannerProps): JSX.Element {
 
   const displayValue = (value: number, unit: string, decimalUnit: number) => {
     return (
-      <Typography variant="h4" className="mono-text" noWrap>
+      <Typography variant="h4" className="mono-text" noWrap color="background.actuals">
         {Number(value).toLocaleString(navigator.languages, {
           minimumFractionDigits: decimalUnit,
           maximumFractionDigits: decimalUnit,
@@ -55,7 +55,7 @@ export function Banner(props: BannerProps): JSX.Element {
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400" noWrap>
+                  <Typography variant="h6" color="grey.600" noWrap>
                     Recovered
                   </Typography>
                   {leachingProfile_recovered_au ? (
@@ -65,10 +65,10 @@ export function Banner(props: BannerProps): JSX.Element {
                   )}
                 </StyledStack>
 
-                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5, borderRightWidth: 4 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400" noWrap>
+                  <Typography variant="h6" color="grey.600" noWrap>
                     Recovery
                   </Typography>
                   {leachingProfile_recoverable_au ? (
@@ -79,7 +79,7 @@ export function Banner(props: BannerProps): JSX.Element {
                 </StyledStack>
               </StyledStack>
             </StyledStack>
-            <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+            <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5, borderRightWidth: 4 }} />
 
             <StyledStack flexDirection="column" justifyContent="space-evenly">
               <StyledStack flexDirection="row" justifyContent="flex-start">
@@ -88,7 +88,7 @@ export function Banner(props: BannerProps): JSX.Element {
 
               <StyledStack flexDirection="row" justifyContent="space-evenly">
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400">
+                  <Typography variant="h6" color="grey.600">
                     Added
                   </Typography>
                   {cnAdded ? (
@@ -99,10 +99,10 @@ export function Banner(props: BannerProps): JSX.Element {
                   )}
                 </StyledStack>
 
-                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5, borderRightWidth: 4 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400" noWrap>
+                  <Typography variant="h6" color="grey.600" noWrap>
                     Used per hour
                   </Typography>
                   {cnUsed ? (
@@ -113,10 +113,10 @@ export function Banner(props: BannerProps): JSX.Element {
                   )}
                 </StyledStack>
 
-                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5 }} />
+                <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 5, borderRightWidth: 4 }} />
 
                 <StyledStack flexDirection="column" justifyContent="space-evenly">
-                  <Typography variant="h5" color="grey.400" noWrap>
+                  <Typography variant="h6" color="grey.600" noWrap>
                     Tailings Conc.
                   </Typography>
                   {cnConcTailing ? (

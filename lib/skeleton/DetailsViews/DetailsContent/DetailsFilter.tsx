@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Box, Button, Card, CardProps, Stack } from '@mui/material';
+import { Box, Button, Card, CardProps, Stack, useTheme } from '@mui/material';
 import { OdsDateOption } from 'components/DateOption/OdsDateOption';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import dayjs from 'dayjs';
@@ -20,6 +20,8 @@ export const DetailsFilter = (props: DetailsFilterProps) => {
 
   const [currentShiftData] = useState(data.shiftData);
   const [isForecast, setIsForecast] = useState(true);
+
+  let theme = useTheme();
 
   const handleForecastAdjust = () => {
     setIsForecast(!isForecast);
@@ -59,9 +61,13 @@ export const DetailsFilter = (props: DetailsFilterProps) => {
           <Button
             variant="contained"
             onClick={handleForecastAdjust}
-            color="primary"
             size="small"
-            sx={{ fontSize: 'large', width: '30%' }}
+            sx={{
+              fontSize: theme.typography.h4.fontSize,
+              width: '30%',
+              textTransform: 'none',
+              backgroundColor: 'background.actuals',
+            }}
           >
             <RefreshIcon />
             Adjust Forecast

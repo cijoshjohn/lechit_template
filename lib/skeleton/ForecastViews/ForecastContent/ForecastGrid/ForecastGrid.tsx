@@ -14,7 +14,7 @@ export const ForecastGrid = (props: ForecastMainContentProps) => {
   let today = dayjs();
   return (
     <OdsGridComponent
-      gridRows={[day1]}
+      gridRows={[]}
       gridColumns={simulationSingleColumns}
       gridPageSize={0}
       gridPerPageOptions={[]}

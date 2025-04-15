@@ -51,7 +51,8 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
         value: Number(newShiftData.summary ? newShiftData.summary.throughput : newShiftData.throughput).toLocaleString(
           navigator.languages,
           {
-            minimumFractionDigits: 0,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
           },
         ),
         unit: ' tph',
@@ -62,7 +63,8 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
         value: Number(newShiftData.summary ? newShiftData.summary.p80 : newShiftData.p80).toLocaleString(
           navigator.languages,
           {
-            minimumFractionDigits: 0,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
           },
         ),
         unit: ' μm',
@@ -74,6 +76,7 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
           newShiftData.summary ? newShiftData.summary.percentSolids : newShiftData.percentSolids,
         ).toLocaleString(navigator.languages, {
           minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
         }),
         unit: ' %',
       },
@@ -83,7 +86,8 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
         value: Number(newShiftData.summary ? newShiftData.summary.auProduced : newShiftData.auProduced).toLocaleString(
           navigator.languages,
           {
-            minimumFractionDigits: 0,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           },
         ),
         unit: ' ppm',
@@ -95,6 +99,7 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
           navigator.languages,
           {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           },
         ),
         unit: ' %',
@@ -106,6 +111,7 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
           navigator.languages,
           {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           },
         ),
 
@@ -115,9 +121,9 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
   };
   let getColumns = () => {
     return [
-      { field: 'name', headerName: '', width: 160, align: 'left' },
-      { field: 'value', headerName: '', width: 180, align: 'right', cellClassName: 'mono-text' },
-      { field: 'unit', headerName: '', width: 100, cellClassName: 'unit-column' },
+      { field: 'name', headerName: '', width: 140, align: 'left' },
+      { field: 'value', headerName: '', width: 130, align: 'right', cellClassName: 'mono-text' },
+      { field: 'unit', headerName: '', width: 70, align: 'left', cellClassName: 'unit-column' },
     ];
   };
 
@@ -126,15 +132,21 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
       <>
         <StyledCard userColor={userColor} sizePx={sizePx} {...derivedProps} data-testid="feed-data">
           <StyledPaper>
-            <Typography variant="h3" padding={1} my={2}>
+            <Typography
+              variant="h3"
+              sx={{ color: currentTheme.palette.text.primary }}
+              marginTop={0.7}
+              marginBottom={2}
+              fontSize={'2.5rem!important'}
+            >
               Feed
             </Typography>
 
             <DataGridPro
               sx={{
                 border: 0,
-                '& .MuiDataGrid-cell': { fontSize: currentTheme.typography.h5 },
-                '& data-colindex=1': { textAlign: 'right !important' },
+                '& .MuiDataGrid-cell': { fontSize: currentTheme.typography.h6 },
+                '& data-colindex=1': { textAlign: 'right !important', letterSpacing: '-0.9px !important' },
                 '& .MuiDataGrid-columnHeaders': {
                   display: 'none', // Hides the entire header row
                 },
@@ -148,9 +160,13 @@ export function FeedDetails(props: FeedDetailsProps): JSX.Element {
                 '& .odd-row': {
                   backgroundColor: currentTheme.palette.background.paper + '!important',
                 },
+                '& .MuiDataGrid-row[data-rowindex="2"]': {
+                  borderBottom: '1px solid black',
+                },
                 // ...generateColIndexStyles(theme),
               }}
               getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
+              rowClassName={(params) => (params.row.id === 2 ? 'thick-border-row' : '')}
               columns={getColumns()}
               rows={getRows()}
               autoHeight
