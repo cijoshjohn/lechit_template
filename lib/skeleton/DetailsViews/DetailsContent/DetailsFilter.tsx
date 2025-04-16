@@ -67,6 +67,7 @@ export const DetailsFilter = (props: DetailsFilterProps) => {
               width: '30%',
               textTransform: 'none',
               backgroundColor: 'background.actuals',
+              color: theme.palette.getContrastText(theme.palette.text.primary),
             }}
           >
             <RefreshIcon />

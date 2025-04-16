@@ -1,5 +1,5 @@
 import { ColorSystemOptions, DefaultColorScheme } from '@mui/material/styles/createThemeWithVars';
-import { common, grey } from '@mui/material/colors';
+import { common, grey, green, blue } from '@mui/material/colors';
 import { odsCoolGrey } from '../../tokens/OdsCoolGrey';
 import { odsOricaBlue } from 'tokens';
 import { createOverlays } from '../../utils/ElevationUtils';
@@ -13,8 +13,9 @@ export function odsThemeColorSchemes(): ThemeColorSchemes {
       palette: {
         background: {
           default: grey[100],
-          actuals: odsOricaBlue[400],
+          actuals: odsOricaBlue[600],
           forecast: odsCoolGrey[400],
+          baseline: green[600],
         } as unknown,
         AppBar: {
           defaultBg: odsCoolGrey[900],
@@ -35,9 +36,10 @@ export function odsThemeColorSchemes(): ThemeColorSchemes {
           active: 'rgba(255, 255, 255, 0.54)',
         },
         background: {
-          default: odsCoolGrey[900],
-          actuals: odsOricaBlue[400],
+          default: grey[900],
+          actuals: odsOricaBlue[600],
           forecast: odsCoolGrey[400],
+          baseline: green[600],
         } as unknown,
         AppBar: {
           defaultBg: odsCoolGrey[900],

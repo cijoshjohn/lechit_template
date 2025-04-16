@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-base-to-string */
 import { Tooltip } from '@mui/material';
 import { convertDigits, convertPriceVal, convertNum } from './config';
-
+import { GridColDef, GridColumnGroupingModel } from '@mui/x-data-grid';
 const tankColumns = [
   {
     field: 'tankNo',
@@ -154,19 +154,19 @@ const weeklyColumnsBase = [
   },
 ];
 
-const multiShiftColumnsBase = [
+const multiShiftColumnsBase: GridColDef[] = [
   {
     field: 'shiftId',
     headerName: 'Shift Id',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.shiftId) || ''}`,
+    valueGetter: (_value, row) => `${row?.shiftId ?? ''}`,
     width: 180,
   },
   {
     field: 'auProduced',
     headerName: 'Recovered (g/h)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.auProduced) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row?.auProduced) || ''}`,
     width: 110,
   },
 
@@ -174,14 +174,14 @@ const multiShiftColumnsBase = [
     field: 'auRecovered',
     headerName: 'Recovery (%)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.auRecovered) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row?.auRecovered) || ''}`,
   },
 
   {
     field: 'cnAdded',
     headerName: 'NaCN Added (kg/t)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cnAdded) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row?.cnAdded) || ''}`,
     width: 150,
   },
 
@@ -189,130 +189,116 @@ const multiShiftColumnsBase = [
     field: 'cnUsed',
     headerName: 'Total NaCN Used (kg/hr)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cnUsed) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row?.cnUsed) || ''}`,
   },
   {
     field: 'cnConcTailing',
     headerName: 'Tailings CN- (ppm)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.cnConcTailing) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row?.cnConcTailing) || ''}`,
   },
 
   {
     field: 'AuValue',
     headerName: 'Au Value ($)',
     flex: 1,
-    valueGetter: (params) => params.row.AuValue || '',
+    valueGetter: (_value, row) => `${convertDigits(row?.AuValue) || ''}`,
   },
 
   {
     field: 'CnCost',
     headerName: 'NaCN Cost ($)',
     flex: 1,
-    valueGetter: (params) => params.row.CnCost || '',
+    valueGetter: (_value, row) => `${convertDigits(row?.CnCost) || ''}`,
   },
 
   {
     field: 'TotalValue',
     headerName: 'Total Value ($)',
     flex: 1,
-    valueGetter: (params) => params.row.TotalValue || '',
+    valueGetter: (_value, row) => `${convertDigits(row?.TotalValue) || ''}`,
   },
 
   {
     field: 'throughput',
     headerName: 'Throughput (tph)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.throughput) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.throughput) || ''}`,
   },
 
   {
     field: 'p80',
     headerName: 'P80 (µm)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.p80) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.p80) || ''}`,
   },
 
   {
     field: 'percentSolids',
     headerName: 'Solids (%)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.percentSolids) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.percentSolids) || ''}`,
   },
 
   {
     field: 'gradeAu',
     headerName: 'Au (ppm)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.gradeAu) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.gradeAu) || ''}`,
   },
 
   {
     field: 'gradeCu',
     headerName: 'Cu (%)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.gradeCu) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.gradeCu) || ''}`,
   },
 
   {
     field: 'gradeS',
     headerName: 'S (%)',
     flex: 1,
-    valueGetter: (params) => `${convertDigits(params.row.gradeS) || ''}`,
+    valueGetter: (_value, row) => `${convertDigits(row.gradeS) || ''}`,
   },
 ];
 
-const columnGroupingModelBase = [
+const columnGroupingModel: GridColumnGroupingModel = [
   {
     groupId: 'Gold',
     headerName: 'Gold',
-    description: '',
-    children: [
-      { field: 'auProduced', key: 'auProduced' },
-      { field: 'auRecovered', key: 'auRecovered' },
-    ],
+    children: [{ field: 'auProduced' }, { field: 'auRecovered' }],
   },
-
   {
     groupId: 'Cyanide',
-    description: '',
-    children: [
-      { field: 'cnAdded', key: 'cnAdded' },
-      { field: 'cnUsed', key: 'cnUsed' },
-      { field: 'cnConcTailing', key: 'cnConcTailing' },
-    ],
+    headerName: 'Cyanide',
+    children: [{ field: 'cnAdded' }, { field: 'cnUsed' }, { field: 'cnConcTailing' }],
   },
-
   {
     groupId: 'Value',
-    description: '',
-    children: [
-      { field: 'AuValue', key: 'AuValue' },
-      { field: 'CnCost', key: 'CnCost' },
-      { field: 'TotalValue', key: 'TotalValue' },
-    ],
+    headerName: 'Value',
+    children: [{ field: 'AuValue' }, { field: 'CnCost' }, { field: 'TotalValue' }],
   },
-
   {
     groupId: 'Feed',
-    description: '',
-    children: [
-      { field: 'throughput', key: 'throughput' },
-      { field: 'p80', key: 'p80' },
-      { field: 'percentSolids', key: 'percentSolids' },
-    ],
+    headerName: 'Feed',
+    children: [{ field: 'throughput' }, { field: 'p80' }, { field: 'percentSolids' }],
   },
-
   {
     groupId: 'Grades',
-    description: '',
-    children: [
-      { field: 'gradeAu', key: 'gradeAu' },
-      { field: 'gradeCu', key: 'gradeCu' },
-      { field: 'gradeS', key: 'gradeS' },
-    ],
+    headerName: 'Grades',
+    children: [{ field: 'gradeAu' }, { field: 'gradeCu' }, { field: 'gradeS' }],
   },
+  ,
 ];
+
+/* const columnGroupingModel: GridColumnGroupingModel = [
+  {
+    groupId: 'gold_group',
+    headerName: 'Gold',
+    description: '',
+    children: [{ field: 'auProduced' }, { field: 'auRecovered' }],
+  },
+]; */
 
 const renderSingleCell = (params) => {
   /*  var result = null;
@@ -563,7 +549,7 @@ export {
   columnGroupingBase,
   weeklyColumnsBase,
   multiShiftColumnsBase,
-  columnGroupingModelBase,
+  columnGroupingModel,
   simulationSingleColumns,
   simulationMultiShifColumns,
   simulationGroupDetails,

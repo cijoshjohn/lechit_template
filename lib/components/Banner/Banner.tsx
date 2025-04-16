@@ -20,7 +20,7 @@ export function Banner(props: BannerProps): JSX.Element {
   const theme = useTheme();
   const StyledStack = styled(Stack)(({ theme }) => ({
     display: 'flex',
-    gap: theme.spacing(1),
+    gap: theme.spacing(0.5),
     width: '100%',
   }));
 

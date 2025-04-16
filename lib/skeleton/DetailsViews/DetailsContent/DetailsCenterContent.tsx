@@ -9,15 +9,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import OdsSingleGauge from 'components/GraphComponent/Graph/OdsSingleGauge/OdsSingleGaugeChart';
 import { CaroselComponent } from 'components/Carosel/CaroselComponent';
 import { day1 } from '../../../../src/stories/NewStubshiftData';
-import { Code, GridView } from '@mui/icons-material';
+import { Code, GridView, BarChart } from '@mui/icons-material';
 import { OdsGridComponent } from 'components/Grid/OdsGridComponent';
-import {
-  tankColumns,
-  columnGroupingBase,
-  multiShiftColumnsBase,
-  columnGroupingModelBase,
-} from '../../../../src/config/GridColumnDetails';
+import { tankColumns, multiShiftColumnsBase, columnGroupingModel } from '../../../../src/config/GridColumnDetails';
 import RangeShiftData from 'models/RangeShiftData';
+import { ShiftChartViewSkeleton } from 'skeleton/ShiftViews/ShiftViewsContent/ShiftChartViewSkeleton';
 
 export type DetailsMainContentProps = BoxProps & {
   shiftData: ShiftData | object;
@@ -76,10 +72,18 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
             <IconButton
               aria-label="grid"
               color="primary"
-              onClick={() => onContentChange('decrement')}
+              onClick={() => onContentChange('tankGrid')}
               data-testid="date-main"
             >
               <GridView />
+            </IconButton>
+            <IconButton
+              aria-label="grid"
+              color="primary"
+              onClick={() => onContentChange('tankGraph')}
+              data-testid="date-main"
+            >
+              <BarChart />
             </IconButton>
           </Stack>
         </Stack>
@@ -273,7 +277,7 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           gridColumns={multiShiftColumnsBase}
           gridPageSize={0}
           gridPerPageOptions={[]}
-          columnGroupingModel={columnGroupingModelBase}
+          columnGroupingModel={columnGroupingModel}
           columns={[]}
         ></OdsGridComponent>
       </>
@@ -299,8 +303,10 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
             />
           </>
         ) : (
-          GridDetails()
+          <></>
         )}
+        {mainContentType === 'tankGrid' ? GridDetails() : <></>}
+        {mainContentType === 'tankGraph' ? <ShiftChartViewSkeleton chartData={[]} /> : <></>}
       </>
     );
   };

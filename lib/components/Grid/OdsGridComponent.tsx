@@ -30,7 +30,7 @@ const StyledGrid = styled(DataGridPro, {
  * A list containing navigation items, designed to sit in the side bar.
  */
 export function OdsGridComponent(props: OdsGridPorps) {
-  let { gridRows, gridColumns, gridPageSize, gridPerPageOptions } = props;
+  let { gridRows, gridColumns, gridPageSize, gridPerPageOptions, columnGroupingModel } = props;
   gridPageSize = gridPageSize ? gridPageSize : 10;
   gridPerPageOptions = gridPerPageOptions ? gridPerPageOptions : [5, 10, 25, { value: -1, label: 'All' }];
   const currentTheme = useTheme();
@@ -45,6 +45,7 @@ export function OdsGridComponent(props: OdsGridPorps) {
           getRowId={getRowId}
           rows={gridRows}
           columns={gridColumns}
+          pagination
           initialState={{
             pagination: {
               paginationModel: { pageSize: gridPageSize, page: 0 },
@@ -53,10 +54,10 @@ export function OdsGridComponent(props: OdsGridPorps) {
           sx={{
             // Alternating row colors
             '& .even-row': {
-              backgroundColor: currentTheme.palette.action.hover + '!important',
+              backgroundColor: currentTheme.palette.background.paper + '!important',
             },
             '& .odd-row': {
-              backgroundColor: currentTheme.palette.background.paper + '!important',
+              backgroundColor: currentTheme.palette.action.hover + '!important',
             },
             '& .MuiDataGrid-cell': {
               fontSize: currentTheme.typography.subtitle1.fontSize,
@@ -67,6 +68,7 @@ export function OdsGridComponent(props: OdsGridPorps) {
           }}
           getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}
           pageSizeOptions={gridPerPageOptions}
+          columnGroupingModel={columnGroupingModel}
         ></StyledGrid>
       ) : (
         <></>
