@@ -350,10 +350,6 @@ export const ForecastMainContent = (props: ForecastMainContentProps) => {
             </Toolbar>
           </AppBar>
 
-          {/* <AbsoluteFeedFormInputs /> */}
-
-          {/* <RelativeFeedInputForm /> */}
-
           {forecastType ? <RelativeFeedInputForm /> : <AbsoluteFeedFormInputs />}
 
           <Grid container direction="row" justifyContent="space-around" alignItems="center" padding={2}>

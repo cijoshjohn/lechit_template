@@ -11,7 +11,12 @@ import { CaroselComponent } from 'components/Carosel/CaroselComponent';
 import { day1 } from '../../../../src/stories/NewStubshiftData';
 import { Code, GridView, BarChart } from '@mui/icons-material';
 import { OdsGridComponent } from 'components/Grid/OdsGridComponent';
-import { tankColumns, multiShiftColumnsBase, columnGroupingModel } from '../../../../src/config/GridColumnDetails';
+import {
+  tankColumns,
+  multiShiftColumnsBase,
+  columnGroupingModel,
+  columnGroupingBase,
+} from '../../../../src/config/GridColumnDetails';
 import RangeShiftData from 'models/RangeShiftData';
 import { ShiftChartViewSkeleton } from 'skeleton/ShiftViews/ShiftViewsContent/ShiftChartViewSkeleton';
 
@@ -262,7 +267,7 @@ export const DetailsCenterContent = (props: DetailsMainContentProps) => {
           gridColumns={tankColumns}
           gridPageSize={0}
           gridPerPageOptions={[]}
-          columnGroupingModel={[]}
+          columnGroupingModel={columnGroupingBase}
           columns={[]}
         ></OdsGridComponent>
       </>

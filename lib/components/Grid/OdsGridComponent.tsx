@@ -60,10 +60,17 @@ export function OdsGridComponent(props: OdsGridPorps) {
               backgroundColor: currentTheme.palette.action.hover + '!important',
             },
             '& .MuiDataGrid-cell': {
-              fontSize: currentTheme.typography.subtitle1.fontSize,
+              fontSize: currentTheme.typography.subtitle2.fontSize,
             },
             '& .MuiDataGrid-columnHeaderTitleContainer': {
-              fontSize: currentTheme.typography.subtitle1.fontSize,
+              fontSize: currentTheme.typography.subtitle2.fontSize,
+            },
+            '& .MuiDataGrid-columnHeaderTitle': {
+              whiteSpace: 'pre-line', // allow \n line breaks
+              overflow: 'visible',
+              textOverflow: 'unset',
+              lineHeight: 1.05,
+              wordBreak: 'break-all',
             },
           }}
           getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even-row' : 'odd-row')}

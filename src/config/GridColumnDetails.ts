@@ -8,6 +8,7 @@ const tankColumns = [
   {
     field: 'tankNo',
     headerName: 'Tank No',
+    flex: 1,
     valueGetter: (_value, row) => `${row?.tankNo ?? ''}`,
   },
   {
@@ -60,22 +61,13 @@ const columnGroupingBase = [
     groupId: 'gold',
     headerName: 'Gold',
     description: '',
-    children: [
-      { field: 'leachingProfile.model_au' },
-      { field: 'leachingProfile.recoverable_au' },
-      { field: 'leachingProfile.inaccessible_au' },
-    ],
+    children: [{ field: 'model_au' }, { field: 'recoverable_au' }, { field: 'inaccessible_au' }],
   },
   {
     groupId: 'cyanide',
     headerName: 'Cyanide',
     description: '',
-    children: [
-      { field: 'cnadded' },
-      { field: 'cyanideProfile.model_cn' },
-      { field: 'cyanideProfile.model_cu' },
-      { field: 'cyanideProfile.model_s' },
-    ],
+    children: [{ field: 'cnadded' }, { field: 'model_cn' }, { field: 'model_cu' }, { field: 'model_s' }],
   },
 ];
 
@@ -187,7 +179,7 @@ const multiShiftColumnsBase: GridColDef[] = [
 
   {
     field: 'cnUsed',
-    headerName: 'Total NaCN Used (kg/hr)',
+    headerName: 'Total NaCN Used (kg/h)',
     flex: 1,
     valueGetter: (_value, row) => `${convertDigits(row?.cnUsed) || ''}`,
   },
@@ -221,7 +213,7 @@ const multiShiftColumnsBase: GridColDef[] = [
 
   {
     field: 'throughput',
-    headerName: 'Throughput (tph)',
+    headerName: 'Throughput (t/h)',
     flex: 1,
     valueGetter: (_value, row) => `${convertDigits(row.throughput) || ''}`,
   },
